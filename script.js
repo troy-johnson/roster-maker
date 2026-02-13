@@ -4,52 +4,50 @@ const LEAGUES = {
 };
 
 const POSITION_OPTIONS = ["F", "D", "G", "F/D", "D/G", "F/G", "F/D/G"];
-
-const ROSTER_STATUSES = [
-  "full time both teams",
-  "full time county only",
-  "full time MIC only",
-  "full time county/part time MIC",
-  "part time county/full time MIC",
-  "part time county only",
-  "part time MIC only",
-  "not rostered"
-];
+const LEAGUE_STATUS_OPTIONS = ["full time", "part time", "non-roster"];
 
 const players = [
-  { id: "p1", name: "Jordan Tate", position: "F/D", rosterStatus: "full time county/part time MIC" },
-  { id: "p2", name: "Sasha Kim", position: "D/G", rosterStatus: "part time county only" },
-  { id: "p3", name: "Maya Ibanez", position: "G", rosterStatus: "full time MIC only" },
-  { id: "p4", name: "Nolan Pierce", position: "F/G", rosterStatus: "not rostered" },
-  { id: "p5", name: "Avery Shah", position: "F/D/G", rosterStatus: "full time both teams" }
+  {
+    id: "p1",
+    name: "Jordan Tate",
+    position: "F/D",
+    leagueStatus: { county: "full time", mic: "part time" }
+  },
+  {
+    id: "p2",
+    name: "Sasha Kim",
+    position: "D/G",
+    leagueStatus: { county: "part time", mic: "non-roster" }
+  },
+  {
+    id: "p3",
+    name: "Maya Ibanez",
+    position: "G",
+    leagueStatus: { county: "non-roster", mic: "full time" }
+  },
+  {
+    id: "p4",
+    name: "Nolan Pierce",
+    position: "F/G",
+    leagueStatus: { county: "non-roster", mic: "non-roster" }
+  },
+  {
+    id: "p5",
+    name: "Avery Shah",
+    position: "F/D/G",
+    leagueStatus: { county: "full time", mic: "full time" }
+  }
 ];
 
 const uiState = {
   filters: {
-    position: "all",
-    rosterStatus: "all"
+    position: "all"
   }
 };
 
-function getRosterParticipation(rosterStatus) {
-  switch (rosterStatus) {
-    case "full time both teams":
-      return { county: "full time", mic: "full time" };
-    case "full time county only":
-      return { county: "full time", mic: null };
-    case "full time MIC only":
-      return { county: null, mic: "full time" };
-    case "full time county/part time MIC":
-      return { county: "full time", mic: "part time" };
-    case "part time county/full time MIC":
-      return { county: "part time", mic: "full time" };
-    case "part time county only":
-      return { county: "part time", mic: null };
-    case "part time MIC only":
-      return { county: null, mic: "part time" };
-    default:
-      return { county: null, mic: null };
-  }
+function getAssignedLeagueStatus(player, leagueKey) {
+  const status = player.leagueStatus[leagueKey];
+  return status === "non-roster" ? null : status;
 }
 
 function getVisiblePlayers() {
@@ -61,10 +59,6 @@ function getVisiblePlayers() {
       } else if (!player.position.split("/").includes(selectedPosition)) {
         return false;
       }
-    }
-
-    if (uiState.filters.rosterStatus !== "all" && player.rosterStatus !== uiState.filters.rosterStatus) {
-      return false;
     }
 
     return true;
@@ -83,23 +77,11 @@ function renderToolbar() {
         ${POSITION_OPTIONS.map((position) => `<option value="${position}" ${uiState.filters.position === position ? "selected" : ""}>${position}</option>`).join("")}
       </select>
     </label>
-    <label>
-      Filter by roster status
-      <select id="filter-roster-status">
-        <option value="all" ${uiState.filters.rosterStatus === "all" ? "selected" : ""}>All statuses</option>
-        ${ROSTER_STATUSES.map((status) => `<option value="${status}" ${uiState.filters.rosterStatus === status ? "selected" : ""}>${status}</option>`).join("")}
-      </select>
-    </label>
     <p class="result-count">Showing ${visiblePlayers.length} of ${players.length} players</p>
   `;
 
   toolbar.querySelector("#filter-position").addEventListener("change", (event) => {
     uiState.filters.position = event.target.value;
-    renderBoard();
-  });
-
-  toolbar.querySelector("#filter-roster-status").addEventListener("change", (event) => {
-    uiState.filters.rosterStatus = event.target.value;
     renderBoard();
   });
 }
@@ -110,7 +92,7 @@ function buildPlayerManagementColumn(visiblePlayers) {
 
   column.innerHTML = `
     <h2>Players <span class="count-pill">${visiblePlayers.length}</span></h2>
-    <p class="column-subtext">Set each player's current roster status.</p>
+    <p class="column-subtext">Update position, then expand league controls for roster statuses.</p>
     <div class="line-list" id="players-list"></div>
   `;
 
@@ -122,17 +104,44 @@ function buildPlayerManagementColumn(visiblePlayers) {
 
     row.innerHTML = `
       <div class="player-row-main">
-        <span class="player-line">${player.name} - ${player.position}</span>
+        <p class="player-name">${player.name}</p>
+        <label class="inline-field" for="position-${player.id}">
+          Position
+          <select id="position-${player.id}" data-player-id="${player.id}" class="status-select">
+            ${POSITION_OPTIONS.map((position) => `<option value="${position}" ${player.position === position ? "selected" : ""}>${position}</option>`).join("")}
+          </select>
+        </label>
       </div>
-      <label class="sr-only" for="status-${player.id}">Roster status for ${player.name}</label>
-      <select id="status-${player.id}" data-player-id="${player.id}" class="status-select">
-        ${ROSTER_STATUSES.map((status) => `<option value="${status}" ${player.rosterStatus === status ? "selected" : ""}>${status}</option>`).join("")}
-      </select>
+      <details class="status-accordion">
+        <summary>League roster statuses</summary>
+        <div class="accordion-content">
+          ${Object.entries(LEAGUES)
+            .map(
+              ([leagueKey, leagueTitle]) => `
+                <label class="inline-field" for="status-${player.id}-${leagueKey}">
+                  ${leagueTitle}
+                  <select id="status-${player.id}-${leagueKey}" data-player-id="${player.id}" data-league-key="${leagueKey}" class="status-select league-status-select">
+                    ${LEAGUE_STATUS_OPTIONS.map((status) => `<option value="${status}" ${player.leagueStatus[leagueKey] === status ? "selected" : ""}>${status}</option>`).join("")}
+                  </select>
+                </label>
+              `
+            )
+            .join("")}
+        </div>
+      </details>
     `;
 
-    row.querySelector("select").addEventListener("change", (event) => {
-      player.rosterStatus = event.target.value;
+    row.querySelector(`#position-${player.id}`).addEventListener("change", (event) => {
+      player.position = event.target.value;
       renderBoard();
+    });
+
+    row.querySelectorAll(".league-status-select").forEach((select) => {
+      select.addEventListener("change", (event) => {
+        const leagueKey = event.target.dataset.leagueKey;
+        player.leagueStatus[leagueKey] = event.target.value;
+        renderBoard();
+      });
     });
 
     list.appendChild(row);
@@ -143,8 +152,12 @@ function buildPlayerManagementColumn(visiblePlayers) {
 
 function buildLeagueColumn(title, description, visiblePlayers, leagueKey) {
   const assignedPlayers = visiblePlayers
-    .filter((player) => Boolean(getRosterParticipation(player.rosterStatus)[leagueKey]))
-    .map((player) => `${player.name} - ${player.position} - ${player.rosterStatus}`);
+    .map((player) => ({
+      name: player.name,
+      position: player.position,
+      status: getAssignedLeagueStatus(player, leagueKey)
+    }))
+    .filter((player) => Boolean(player.status));
 
   const column = document.createElement("section");
   column.className = "roster-column";
@@ -154,7 +167,11 @@ function buildLeagueColumn(title, description, visiblePlayers, leagueKey) {
     <p class="column-subtext">${description}</p>
     <div class="line-list">
       ${assignedPlayers.length > 0
-        ? assignedPlayers.map((line) => `<p class="roster-line">${line}</p>`).join("")
+        ? assignedPlayers
+            .map(
+              (player) => `<p class="roster-line">${player.name} - ${player.position} <span class="status-badge ${player.status.replace(" ", "-")}">${player.status}</span></p>`
+            )
+            .join("")
         : '<p class="empty-message">No players currently rostered.</p>'}
     </div>
   `;
