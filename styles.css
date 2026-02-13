@@ -36,7 +36,7 @@ header p {
 .board-controls {
   margin-top: 1rem;
   display: grid;
-  grid-template-columns: repeat(4, minmax(180px, 1fr));
+  grid-template-columns: repeat(5, minmax(160px, 1fr));
   gap: 0.6rem;
   align-items: end;
 }
@@ -235,6 +235,34 @@ select {
 .badge.tier-3 {
   background: #e7e8ec;
   color: #3d4452;
+}
+
+.badge.position {
+  background: #e9f3ff;
+  color: #1f4d7a;
+}
+
+.badge.position-F {
+  background: #ffeacc;
+  color: #8a4f00;
+}
+
+.badge.position-D {
+  background: #e3f7ea;
+  color: #145734;
+}
+
+.badge.position-G {
+  background: #f0e8ff;
+  color: #4d2d92;
+}
+
+.badge.position-F-D,
+.badge.position-D-G,
+.badge.position-F-G,
+.badge.position-F-D-G {
+  background: #e6f7ff;
+  color: #0b4f6c;
 }
 
 .assignment {

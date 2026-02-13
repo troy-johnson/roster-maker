@@ -5,6 +5,7 @@ const LEAGUES = {
 
 const STATUS_OPTIONS = ["full-time", "part-time", "not-playing"];
 const TIER_OPTIONS = [1, 2, 3];
+const POSITION_OPTIONS = ["F", "D", "G", "F/D", "D/G", "F/G", "F/D/G"];
 
 const columns = [
   { id: "unassigned", title: "Unassigned", description: "No league selected" },
@@ -18,6 +19,7 @@ const players = [
     id: "p1",
     name: "Jordan Tate",
     tier: 1,
+    position: "F/D",
     leagues: [],
     statuses: { A: "full-time", B: "part-time" }
   },
@@ -25,6 +27,7 @@ const players = [
     id: "p2",
     name: "Sasha Kim",
     tier: 2,
+    position: "D/G",
     leagues: ["A"],
     statuses: { A: "part-time", B: "not-playing" }
   },
@@ -32,6 +35,7 @@ const players = [
     id: "p3",
     name: "Maya Ibanez",
     tier: 2,
+    position: "G",
     leagues: ["B"],
     statuses: { A: "not-playing", B: "full-time" }
   },
@@ -39,6 +43,7 @@ const players = [
     id: "p4",
     name: "Nolan Pierce",
     tier: 3,
+    position: "F/G",
     leagues: [],
     statuses: { A: "part-time", B: "not-playing" }
   },
@@ -46,6 +51,7 @@ const players = [
     id: "p5",
     name: "Avery Shah",
     tier: 1,
+    position: "F/D/G",
     leagues: ["A", "B"],
     statuses: { A: "full-time", B: "full-time" }
   }
@@ -54,7 +60,8 @@ const players = [
 const uiState = {
   filters: {
     tier: "all",
-    status: "all"
+    status: "all",
+    position: "all"
   },
   sort: "priority-name"
 };
@@ -137,6 +144,10 @@ function titleizeStatus(status) {
   return status.replace("-", " ");
 }
 
+function getPositionClassSuffix(position) {
+  return position.replaceAll("/", "-");
+}
+
 function getFilteredAndSortedPlayers() {
   return players
     .filter((player) => {
@@ -147,6 +158,16 @@ function getFilteredAndSortedPlayers() {
       if (uiState.filters.status !== "all") {
         const hasStatus = Object.values(player.statuses).includes(uiState.filters.status);
         if (!hasStatus) return false;
+      }
+
+      if (uiState.filters.position !== "all") {
+        const selectedPosition = uiState.filters.position;
+        if (selectedPosition.includes("/")) {
+          if (player.position !== selectedPosition) return false;
+        } else {
+          const positions = player.position.split("/");
+          if (!positions.includes(selectedPosition)) return false;
+        }
       }
 
       return true;
@@ -170,6 +191,7 @@ function renderCard(player) {
     <h3 class="player-name">${player.name}</h3>
     <div class="badges">
       <span class="badge tier tier-${player.tier}">Tier ${player.tier}</span>
+      <span class="badge position position-${getPositionClassSuffix(player.position)}">Position ${player.position}</span>
       <span class="badge status-${player.statuses.A}">County: ${titleizeStatus(player.statuses.A)}</span>
       <span class="badge status-${player.statuses.B}">MIC: ${titleizeStatus(player.statuses.B)}</span>
     </div>
@@ -318,6 +340,13 @@ function renderToolbar() {
       </select>
     </label>
     <label>
+      Filter by position
+      <select id="filter-position">
+        <option value="all" ${uiState.filters.position === "all" ? "selected" : ""}>All positions</option>
+        ${POSITION_OPTIONS.map((position) => `<option value="${position}" ${uiState.filters.position === position ? "selected" : ""}>${position}</option>`).join("")}
+      </select>
+    </label>
+    <label>
       Sort
       <select id="sort-order">
         <option value="priority-name" selected>Priority then alphabetical</option>
@@ -333,6 +362,11 @@ function renderToolbar() {
 
   toolbar.querySelector("#filter-status").addEventListener("change", (event) => {
     uiState.filters.status = event.target.value;
+    renderBoard();
+  });
+
+  toolbar.querySelector("#filter-position").addEventListener("change", (event) => {
+    uiState.filters.position = event.target.value;
     renderBoard();
   });
 
