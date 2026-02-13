@@ -1,36 +1,16 @@
 const LEAGUES = {
-  A: "League A",
-  B: "League B"
+  A: "SLC County",
+  B: "Mammoth Practice Facility"
 };
 
 const STATUS_OPTIONS = ["full-time", "part-time", "not-playing"];
 const TIER_OPTIONS = [1, 2, 3];
 
 const columns = [
-  {
-    id: "unassigned",
-    title: "Unassigned",
-    description: "No league selected",
-    theme: "neutral"
-  },
-  {
-    id: "leagueA",
-    title: "League A",
-    description: "Primary League A roster",
-    theme: "current-team"
-  },
-  {
-    id: "leagueB",
-    title: "League B",
-    description: "Primary League B roster",
-    theme: "second-team"
-  },
-  {
-    id: "both",
-    title: "Both Leagues",
-    description: "Assigned to League A + League B",
-    theme: "neutral"
-  }
+  { id: "unassigned", title: "Unassigned", description: "No league selected" },
+  { id: "leagueA", title: "SLC County", description: "Primary SLC County roster" },
+  { id: "leagueB", title: "Mammoth Practice Facility", description: "Primary Mammoth Practice Facility roster" },
+  { id: "both", title: "Both Sites", description: "Assigned to SLC County + Mammoth Practice Facility" }
 ];
 
 const players = [
@@ -83,7 +63,7 @@ let draggingPlayerId = null;
 
 function getAssignmentSummary(player) {
   if (player.leagues.length === 0) return "Unassigned";
-  if (player.leagues.length === 2) return "League A + League B";
+  if (player.leagues.length === 2) return `${LEAGUES.A} + ${LEAGUES.B}`;
   return player.leagues[0] === "A" ? LEAGUES.A : LEAGUES.B;
 }
 
@@ -120,7 +100,7 @@ function canAssign(player, destinationId) {
     return false;
   }
 
-  // business rule: tier 3 players cannot move into League B only
+  // business rule: tier 3 players cannot move into the MIC-only column
   if (destinationId === "leagueB" && player.tier === 3) {
     return false;
   }
@@ -190,19 +170,19 @@ function renderCard(player) {
     <h3 class="player-name">${player.name}</h3>
     <div class="badges">
       <span class="badge tier tier-${player.tier}">Tier ${player.tier}</span>
-      <span class="badge status-${player.statuses.A}">A: ${titleizeStatus(player.statuses.A)}</span>
-      <span class="badge status-${player.statuses.B}">B: ${titleizeStatus(player.statuses.B)}</span>
+      <span class="badge status-${player.statuses.A}">County: ${titleizeStatus(player.statuses.A)}</span>
+      <span class="badge status-${player.statuses.B}">MIC: ${titleizeStatus(player.statuses.B)}</span>
     </div>
     <p class="assignment">Current assignment: ${getAssignmentSummary(player)}</p>
     <div class="card-controls">
       <label>
-        League A status
+        County status
         <select data-control="status" data-league="A">
           ${STATUS_OPTIONS.map((status) => `<option value="${status}" ${player.statuses.A === status ? "selected" : ""}>${titleizeStatus(status)}</option>`).join("")}
         </select>
       </label>
       <label>
-        League B status
+        MIC status
         <select data-control="status" data-league="B">
           ${STATUS_OPTIONS.map((status) => `<option value="${status}" ${player.statuses.B === status ? "selected" : ""}>${titleizeStatus(status)}</option>`).join("")}
         </select>
