@@ -78,11 +78,20 @@ select {
   padding: 0.75rem;
 }
 
+.league-county {
+  border-color: #6f1d1b;
+}
+
+.league-mic {
+  border-color: #8ecbff;
+}
+
 .roster-column h2 {
   margin: 0;
   font-size: 1rem;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 0.45rem;
 }
 
@@ -93,6 +102,29 @@ select {
   background: var(--surface-2);
 }
 
+
+.count-pills {
+  display: inline-flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.count-pill-f {
+  background: #3a174f;
+}
+
+.count-pill-d {
+  background: #703304;
+}
+
+.count-pill-g {
+  background: #0e4b4f;
+}
+
+.count-pill-subs {
+  background: #6c5a00;
+}
 .column-subtext {
   margin: 0.25rem 0 0.75rem;
   color: var(--muted);
@@ -115,16 +147,11 @@ select {
   background: #1a2028;
 }
 
-.player-row-main {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.45rem;
-}
-
 .player-name {
   margin: 0;
   font-size: 0.92rem;
   font-weight: 600;
+  color: var(--text);
 }
 
 .inline-field {
@@ -132,6 +159,7 @@ select {
   gap: 0.25rem;
   color: var(--muted);
   font-size: 0.8rem;
+  min-width: 0;
 }
 
 .status-select {
@@ -143,11 +171,40 @@ select {
   cursor: pointer;
   color: var(--muted);
   font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  list-style: none;
+}
+
+.status-accordion summary::-webkit-details-marker {
+  display: none;
+}
+
+.summary-main {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.summary-description {
+  text-transform: lowercase;
+}
+
+.summary-caret {
+  margin-left: auto;
+  font-size: 0.95rem;
+}
+
+.status-accordion[open] .summary-caret {
+  transform: rotate(180deg);
 }
 
 .accordion-content {
   margin-top: 0.5rem;
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 0.45rem;
 }
 
@@ -158,27 +215,6 @@ select {
   flex-wrap: wrap;
   align-items: center;
   gap: 0.4rem;
-}
-
-.status-badge {
-  display: inline-block;
-  border-radius: 999px;
-  padding: 0.15rem 0.5rem;
-  border: 1px solid;
-  font-size: 0.72rem;
-  text-transform: lowercase;
-}
-
-.status-badge.full-time {
-  border-color: #1c6b2b;
-  background: #dbf8e1;
-  color: #0d3415;
-}
-
-.status-badge.part-time {
-  border-color: #4b2a6f;
-  background: #f0e5ff;
-  color: #2e1748;
 }
 
 .empty-message {
@@ -198,9 +234,37 @@ select {
   border: 0;
 }
 
+@media (min-width: 1181px) {
+  .players-column .accordion-content {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .players-column .accordion-content .inline-field {
+    flex: 1 1 180px;
+    max-width: 220px;
+  }
+}
+
 @media (max-width: 1180px) {
   .board,
   .board-controls {
     grid-template-columns: 1fr;
   }
+}
+
+.roster-group {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.roster-group h3 {
+  margin: 0 0 0.4rem;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
 }
