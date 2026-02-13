@@ -1,344 +1,81 @@
 const LEAGUES = {
-  A: "SLC County",
-  B: "Mammoth Practice Facility"
+  county: "SLC County",
+  mic: "Mammoth Ice Center"
 };
 
-const STATUS_OPTIONS = ["full-time", "part-time", "not-playing"];
-const TIER_OPTIONS = [1, 2, 3];
 const POSITION_OPTIONS = ["F", "D", "G", "F/D", "D/G", "F/G", "F/D/G"];
 
-const columns = [
-  { id: "unassigned", title: "Unassigned", description: "No league selected" },
-  { id: "leagueA", title: "SLC County", description: "Primary SLC County roster" },
-  { id: "leagueB", title: "Mammoth Practice Facility", description: "Primary Mammoth Practice Facility roster" },
-  { id: "both", title: "Both Sites", description: "Assigned to SLC County + Mammoth Practice Facility" }
+const ROSTER_STATUSES = [
+  "full time both teams",
+  "full time county only",
+  "full time MIC only",
+  "full time county/part time MIC",
+  "part time county/full time MIC",
+  "part time county only",
+  "part time MIC only",
+  "not rostered"
 ];
 
 const players = [
-  {
-    id: "p1",
-    name: "Jordan Tate",
-    tier: 1,
-    position: "F/D",
-    leagues: [],
-    statuses: { A: "full-time", B: "part-time" }
-  },
-  {
-    id: "p2",
-    name: "Sasha Kim",
-    tier: 2,
-    position: "D/G",
-    leagues: ["A"],
-    statuses: { A: "part-time", B: "not-playing" }
-  },
-  {
-    id: "p3",
-    name: "Maya Ibanez",
-    tier: 2,
-    position: "G",
-    leagues: ["B"],
-    statuses: { A: "not-playing", B: "full-time" }
-  },
-  {
-    id: "p4",
-    name: "Nolan Pierce",
-    tier: 3,
-    position: "F/G",
-    leagues: [],
-    statuses: { A: "part-time", B: "not-playing" }
-  },
-  {
-    id: "p5",
-    name: "Avery Shah",
-    tier: 1,
-    position: "F/D/G",
-    leagues: ["A", "B"],
-    statuses: { A: "full-time", B: "full-time" }
-  }
+  { id: "p1", name: "Jordan Tate", position: "F/D", rosterStatus: "full time county/part time MIC" },
+  { id: "p2", name: "Sasha Kim", position: "D/G", rosterStatus: "part time county only" },
+  { id: "p3", name: "Maya Ibanez", position: "G", rosterStatus: "full time MIC only" },
+  { id: "p4", name: "Nolan Pierce", position: "F/G", rosterStatus: "not rostered" },
+  { id: "p5", name: "Avery Shah", position: "F/D/G", rosterStatus: "full time both teams" }
 ];
 
 const uiState = {
   filters: {
-    tier: "all",
-    status: "all",
-    position: "all"
-  },
-  sort: "priority-name"
+    position: "all",
+    rosterStatus: "all"
+  }
 };
 
-let draggingPlayerId = null;
-
-function getAssignmentSummary(player) {
-  if (player.leagues.length === 0) return "Unassigned";
-  if (player.leagues.length === 2) return `${LEAGUES.A} + ${LEAGUES.B}`;
-  return player.leagues[0] === "A" ? LEAGUES.A : LEAGUES.B;
-}
-
-function getColumnForPlayer(player) {
-  if (player.leagues.length === 0) return "unassigned";
-  if (player.leagues.length === 2) return "both";
-  return player.leagues[0] === "A" ? "leagueA" : "leagueB";
-}
-
-function getStatusesForDestination(player, destinationId) {
-  if (destinationId === "unassigned") return [];
-  if (destinationId === "leagueA") return [player.statuses.A];
-  if (destinationId === "leagueB") return [player.statuses.B];
-  return [player.statuses.A, player.statuses.B];
-}
-
-function canAssign(player, destinationId) {
-  if (!player) return false;
-  if (destinationId === "unassigned") return true;
-
-  const destinationLeagues =
-    destinationId === "leagueA"
-      ? ["A"]
-      : destinationId === "leagueB"
-        ? ["B"]
-        : ["A", "B"];
-
-  // business rule: part-time tier 3 players cannot be in both leagues
-  if (
-    destinationLeagues.length === 2
-    && destinationLeagues.every((league) => player.statuses[league] === "part-time")
-    && player.tier === 3
-  ) {
-    return false;
+function getRosterParticipation(rosterStatus) {
+  switch (rosterStatus) {
+    case "full time both teams":
+      return { county: "full time", mic: "full time" };
+    case "full time county only":
+      return { county: "full time", mic: null };
+    case "full time MIC only":
+      return { county: null, mic: "full time" };
+    case "full time county/part time MIC":
+      return { county: "full time", mic: "part time" };
+    case "part time county/full time MIC":
+      return { county: "part time", mic: "full time" };
+    case "part time county only":
+      return { county: "part time", mic: null };
+    case "part time MIC only":
+      return { county: null, mic: "part time" };
+    default:
+      return { county: null, mic: null };
   }
-
-  // business rule: tier 3 players cannot move into the MIC-only column
-  if (destinationId === "leagueB" && player.tier === 3) {
-    return false;
-  }
-
-  // business rule: players cannot be assigned to leagues marked not-playing
-  const destinationStatuses = getStatusesForDestination(player, destinationId);
-  if (destinationStatuses.includes("not-playing")) {
-    return false;
-  }
-
-  return true;
 }
 
-function assignPlayer(player, destinationId) {
-  if (destinationId === "unassigned") {
-    player.leagues = [];
-    return;
-  }
-
-  if (destinationId === "leagueA") {
-    player.leagues = player.leagues.includes("B") ? ["A", "B"] : ["A"];
-    return;
-  }
-
-  if (destinationId === "leagueB") {
-    player.leagues = player.leagues.includes("A") ? ["A", "B"] : ["B"];
-    return;
-  }
-
-  player.leagues = ["A", "B"];
-}
-
-function titleizeStatus(status) {
-  return status.replace("-", " ");
-}
-
-function getPositionClassSuffix(position) {
-  return position.replaceAll("/", "-");
-}
-
-function getFilteredAndSortedPlayers() {
-  return players
-    .filter((player) => {
-      if (uiState.filters.tier !== "all" && player.tier !== Number(uiState.filters.tier)) {
+function getVisiblePlayers() {
+  return players.filter((player) => {
+    if (uiState.filters.position !== "all") {
+      const selectedPosition = uiState.filters.position;
+      if (selectedPosition.includes("/")) {
+        if (player.position !== selectedPosition) return false;
+      } else if (!player.position.split("/").includes(selectedPosition)) {
         return false;
       }
-
-      if (uiState.filters.status !== "all") {
-        const hasStatus = Object.values(player.statuses).includes(uiState.filters.status);
-        if (!hasStatus) return false;
-      }
-
-      if (uiState.filters.position !== "all") {
-        const selectedPosition = uiState.filters.position;
-        if (selectedPosition.includes("/")) {
-          if (player.position !== selectedPosition) return false;
-        } else {
-          const positions = player.position.split("/");
-          if (!positions.includes(selectedPosition)) return false;
-        }
-      }
-
-      return true;
-    })
-    .sort((a, b) => {
-      if (uiState.sort === "priority-name") {
-        if (a.tier !== b.tier) return a.tier - b.tier;
-        return a.name.localeCompare(b.name);
-      }
-      return 0;
-    });
-}
-
-function renderCard(player) {
-  const card = document.createElement("article");
-  card.className = "player-card";
-  card.draggable = true;
-  card.dataset.playerId = player.id;
-
-  card.innerHTML = `
-    <h3 class="player-name">${player.name}</h3>
-    <div class="badges">
-      <span class="badge tier tier-${player.tier}">Tier ${player.tier}</span>
-      <span class="badge position position-${getPositionClassSuffix(player.position)}">Position ${player.position}</span>
-      <span class="badge status-${player.statuses.A}">County: ${titleizeStatus(player.statuses.A)}</span>
-      <span class="badge status-${player.statuses.B}">MIC: ${titleizeStatus(player.statuses.B)}</span>
-    </div>
-    <p class="assignment">Current assignment: ${getAssignmentSummary(player)}</p>
-    <div class="card-controls">
-      <label>
-        County status
-        <select data-control="status" data-league="A">
-          ${STATUS_OPTIONS.map((status) => `<option value="${status}" ${player.statuses.A === status ? "selected" : ""}>${titleizeStatus(status)}</option>`).join("")}
-        </select>
-      </label>
-      <label>
-        MIC status
-        <select data-control="status" data-league="B">
-          ${STATUS_OPTIONS.map((status) => `<option value="${status}" ${player.statuses.B === status ? "selected" : ""}>${titleizeStatus(status)}</option>`).join("")}
-        </select>
-      </label>
-      <label>
-        Priority tier
-        <select data-control="tier">
-          ${TIER_OPTIONS.map((tier) => `<option value="${tier}" ${player.tier === tier ? "selected" : ""}>Tier ${tier}</option>`).join("")}
-        </select>
-      </label>
-    </div>
-  `;
-
-  card.addEventListener("change", (event) => {
-    const target = event.target;
-    if (!(target instanceof HTMLSelectElement)) return;
-
-    if (target.dataset.control === "status") {
-      player.statuses[target.dataset.league] = target.value;
-      player.leagues = player.leagues.filter((league) => player.statuses[league] !== "not-playing");
     }
 
-    if (target.dataset.control === "tier") {
-      player.tier = Number(target.value);
+    if (uiState.filters.rosterStatus !== "all" && player.rosterStatus !== uiState.filters.rosterStatus) {
+      return false;
     }
 
-    renderBoard();
+    return true;
   });
-
-  card.addEventListener("dragstart", (event) => {
-    draggingPlayerId = player.id;
-    card.classList.add("is-dragging");
-    event.dataTransfer.effectAllowed = "move";
-    event.dataTransfer.setData("text/plain", player.id);
-    updateDropTargetStates();
-  });
-
-  card.addEventListener("dragend", () => {
-    draggingPlayerId = null;
-    card.classList.remove("is-dragging");
-    clearColumnStates();
-  });
-
-  return card;
-}
-
-function renderColumn(column, visiblePlayers) {
-  const wrapper = document.createElement("section");
-  wrapper.className = "roster-column";
-  wrapper.dataset.columnId = column.id;
-  wrapper.dataset.theme = column.theme;
-
-  const playersInColumn = visiblePlayers.filter((player) => getColumnForPlayer(player) === column.id);
-  const columnCount = playersInColumn.length;
-  const columnStatuses = playersInColumn.map((player) => getStatusesForDestination(player, column.id));
-  const fullTimeCount = columnStatuses.filter(
-    (statuses) => statuses.length > 0 && statuses.every((status) => status === "full-time")
-  ).length;
-  const partTimeCount = columnStatuses.filter(
-    (statuses) => statuses.length > 0 && statuses.every((status) => status === "part-time")
-  ).length;
-  const dualLeagueCount = playersInColumn.filter((player) => player.leagues.length === 2).length;
-
-  wrapper.innerHTML = `
-    <h2>${column.title} <span class="count-pill">${columnCount}</span></h2>
-    <p class="column-subtext">${column.description}</p>
-    <dl class="column-summary" aria-label="${column.title} summary">
-      <div><dt>Total</dt><dd>${columnCount}</dd></div>
-      <div><dt>Full-time</dt><dd>${fullTimeCount}</dd></div>
-      <div><dt>Part-time</dt><dd>${partTimeCount}</dd></div>
-      <div><dt>Dual league</dt><dd>${dualLeagueCount}</dd></div>
-    </dl>
-    <div class="player-list"></div>
-  `;
-
-  wrapper.addEventListener("dragover", (event) => {
-    if (!draggingPlayerId) return;
-
-    const player = players.find((p) => p.id === draggingPlayerId);
-    const allowed = canAssign(player, column.id);
-
-    if (allowed) {
-      event.preventDefault();
-      event.dataTransfer.dropEffect = "move";
-      wrapper.classList.add("is-valid-target");
-      wrapper.classList.remove("is-invalid-target");
-    } else {
-      event.dataTransfer.dropEffect = "none";
-      wrapper.classList.add("is-invalid-target");
-      wrapper.classList.remove("is-valid-target");
-    }
-  });
-
-  wrapper.addEventListener("dragleave", () => {
-    wrapper.classList.remove("is-valid-target", "is-invalid-target");
-  });
-
-  wrapper.addEventListener("drop", (event) => {
-    event.preventDefault();
-
-    const droppedPlayerId = event.dataTransfer.getData("text/plain") || draggingPlayerId;
-    const player = players.find((p) => p.id === droppedPlayerId);
-
-    if (!player || !canAssign(player, column.id)) {
-      wrapper.classList.add("is-invalid-target");
-      return;
-    }
-
-    assignPlayer(player, column.id);
-    renderBoard();
-  });
-
-  return wrapper;
 }
 
 function renderToolbar() {
   const toolbar = document.querySelector("#board-controls");
-  const visiblePlayers = getFilteredAndSortedPlayers();
+  const visiblePlayers = getVisiblePlayers();
 
   toolbar.innerHTML = `
-    <label>
-      Filter by tier
-      <select id="filter-tier">
-        <option value="all" ${uiState.filters.tier === "all" ? "selected" : ""}>All tiers</option>
-        ${TIER_OPTIONS.map((tier) => `<option value="${tier}" ${String(tier) === uiState.filters.tier ? "selected" : ""}>Tier ${tier}</option>`).join("")}
-      </select>
-    </label>
-    <label>
-      Filter by status
-      <select id="filter-status">
-        <option value="all" ${uiState.filters.status === "all" ? "selected" : ""}>Any status</option>
-        ${STATUS_OPTIONS.map((status) => `<option value="${status}" ${uiState.filters.status === status ? "selected" : ""}>${titleizeStatus(status)}</option>`).join("")}
-      </select>
-    </label>
     <label>
       Filter by position
       <select id="filter-position">
@@ -347,78 +84,108 @@ function renderToolbar() {
       </select>
     </label>
     <label>
-      Sort
-      <select id="sort-order">
-        <option value="priority-name" selected>Priority then alphabetical</option>
+      Filter by roster status
+      <select id="filter-roster-status">
+        <option value="all" ${uiState.filters.rosterStatus === "all" ? "selected" : ""}>All statuses</option>
+        ${ROSTER_STATUSES.map((status) => `<option value="${status}" ${uiState.filters.rosterStatus === status ? "selected" : ""}>${status}</option>`).join("")}
       </select>
     </label>
     <p class="result-count">Showing ${visiblePlayers.length} of ${players.length} players</p>
   `;
-
-  toolbar.querySelector("#filter-tier").addEventListener("change", (event) => {
-    uiState.filters.tier = event.target.value;
-    renderBoard();
-  });
-
-  toolbar.querySelector("#filter-status").addEventListener("change", (event) => {
-    uiState.filters.status = event.target.value;
-    renderBoard();
-  });
 
   toolbar.querySelector("#filter-position").addEventListener("change", (event) => {
     uiState.filters.position = event.target.value;
     renderBoard();
   });
 
-  toolbar.querySelector("#sort-order").addEventListener("change", (event) => {
-    uiState.sort = event.target.value;
+  toolbar.querySelector("#filter-roster-status").addEventListener("change", (event) => {
+    uiState.filters.rosterStatus = event.target.value;
     renderBoard();
   });
 }
 
-function updateDropTargetStates() {
-  const player = players.find((p) => p.id === draggingPlayerId);
-  const cols = document.querySelectorAll(".roster-column");
+function buildPlayerManagementColumn(visiblePlayers) {
+  const column = document.createElement("section");
+  column.className = "roster-column players-column";
 
-  cols.forEach((column) => {
-    const allowed = canAssign(player, column.dataset.columnId);
-    column.classList.toggle("is-invalid-target", !allowed);
-    column.classList.toggle("is-valid-target", allowed);
+  column.innerHTML = `
+    <h2>Players <span class="count-pill">${visiblePlayers.length}</span></h2>
+    <p class="column-subtext">Set each player's current roster status.</p>
+    <div class="line-list" id="players-list"></div>
+  `;
+
+  const list = column.querySelector("#players-list");
+
+  visiblePlayers.forEach((player) => {
+    const row = document.createElement("div");
+    row.className = "player-row";
+
+    row.innerHTML = `
+      <div class="player-row-main">
+        <span class="player-line">${player.name} - ${player.position}</span>
+      </div>
+      <label class="sr-only" for="status-${player.id}">Roster status for ${player.name}</label>
+      <select id="status-${player.id}" data-player-id="${player.id}" class="status-select">
+        ${ROSTER_STATUSES.map((status) => `<option value="${status}" ${player.rosterStatus === status ? "selected" : ""}>${status}</option>`).join("")}
+      </select>
+    `;
+
+    row.querySelector("select").addEventListener("change", (event) => {
+      player.rosterStatus = event.target.value;
+      renderBoard();
+    });
+
+    list.appendChild(row);
   });
+
+  return column;
 }
 
-function clearColumnStates() {
-  document.querySelectorAll(".roster-column").forEach((column) => {
-    column.classList.remove("is-valid-target", "is-invalid-target");
-  });
+function buildLeagueColumn(title, description, visiblePlayers, leagueKey) {
+  const assignedPlayers = visiblePlayers
+    .filter((player) => Boolean(getRosterParticipation(player.rosterStatus)[leagueKey]))
+    .map((player) => `${player.name} - ${player.position} - ${player.rosterStatus}`);
+
+  const column = document.createElement("section");
+  column.className = "roster-column";
+
+  column.innerHTML = `
+    <h2>${title} <span class="count-pill">${assignedPlayers.length}</span></h2>
+    <p class="column-subtext">${description}</p>
+    <div class="line-list">
+      ${assignedPlayers.length > 0
+        ? assignedPlayers.map((line) => `<p class="roster-line">${line}</p>`).join("")
+        : '<p class="empty-message">No players currently rostered.</p>'}
+    </div>
+  `;
+
+  return column;
 }
 
 function renderBoard() {
   renderToolbar();
 
   const board = document.querySelector("#board");
-  const visiblePlayers = getFilteredAndSortedPlayers();
+  const visiblePlayers = getVisiblePlayers();
   board.innerHTML = "";
 
-  columns.forEach((column) => {
-    const columnEl = renderColumn(column, visiblePlayers);
-    const listEl = columnEl.querySelector(".player-list");
-
-    visiblePlayers
-      .filter((player) => getColumnForPlayer(player) === column.id)
-      .forEach((player) => {
-        const card = renderCard(player);
-        if (draggingPlayerId) {
-          const canMoveHere = canAssign(player, column.id);
-          card.classList.toggle("is-disabled", !canMoveHere);
-        }
-        listEl.appendChild(card);
-      });
-
-    board.appendChild(columnEl);
-  });
-
-  if (draggingPlayerId) updateDropTargetStates();
+  board.appendChild(buildPlayerManagementColumn(visiblePlayers));
+  board.appendChild(
+    buildLeagueColumn(
+      LEAGUES.county,
+      "Players currently rostered for county play.",
+      visiblePlayers,
+      "county"
+    )
+  );
+  board.appendChild(
+    buildLeagueColumn(
+      LEAGUES.mic,
+      "Players currently rostered for MIC play.",
+      visiblePlayers,
+      "mic"
+    )
+  );
 }
 
 renderBoard();
