@@ -233,12 +233,28 @@ function renderColumn(column, visiblePlayers) {
   const wrapper = document.createElement("section");
   wrapper.className = "roster-column";
   wrapper.dataset.columnId = column.id;
+  wrapper.dataset.theme = column.theme;
 
-  const columnCount = visiblePlayers.filter((player) => getColumnForPlayer(player) === column.id).length;
+  const playersInColumn = visiblePlayers.filter((player) => getColumnForPlayer(player) === column.id);
+  const columnCount = playersInColumn.length;
+  const columnStatuses = playersInColumn.map((player) => getStatusesForDestination(player, column.id));
+  const fullTimeCount = columnStatuses.filter(
+    (statuses) => statuses.length > 0 && statuses.every((status) => status === "full-time")
+  ).length;
+  const partTimeCount = columnStatuses.filter(
+    (statuses) => statuses.length > 0 && statuses.every((status) => status === "part-time")
+  ).length;
+  const dualLeagueCount = playersInColumn.filter((player) => player.leagues.length === 2).length;
 
   wrapper.innerHTML = `
     <h2>${column.title} <span class="count-pill">${columnCount}</span></h2>
     <p class="column-subtext">${column.description}</p>
+    <dl class="column-summary" aria-label="${column.title} summary">
+      <div><dt>Total</dt><dd>${columnCount}</dd></div>
+      <div><dt>Full-time</dt><dd>${fullTimeCount}</dd></div>
+      <div><dt>Part-time</dt><dd>${partTimeCount}</dd></div>
+      <div><dt>Dual league</dt><dd>${dualLeagueCount}</dd></div>
+    </dl>
     <div class="player-list"></div>
   `;
 

@@ -1,25 +1,12 @@
 :root {
-  --bg: #f5f7fb;
-  --surface: #ffffff;
-  --surface-2: #eef2f8;
-  --text: #1e2633;
-  --muted: #5f6b7b;
-  --border: #dce2ea;
-  --drop-valid: #d9f7e6;
-  --drop-invalid: #fde1e1;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #111826;
-    --surface: #182234;
-    --surface-2: #223048;
-    --text: #e7edf7;
-    --muted: #a7b5cb;
-    --border: #334563;
-    --drop-valid: #123926;
-    --drop-invalid: #4a1f23;
-  }
+  --bg: #2b2f36;
+  --surface: #1f242d;
+  --surface-2: #2a303a;
+  --text: #f4f7fb;
+  --muted: #c6cfdb;
+  --border: #465061;
+  --drop-valid: #193926;
+  --drop-invalid: #4a1f23;
 }
 
 * {
@@ -86,6 +73,9 @@ select {
 }
 
 .roster-column {
+  --team-primary: var(--surface);
+  --team-secondary: var(--surface-2);
+  --team-tertiary: var(--text);
   background: var(--surface);
   border: 2px solid var(--border);
   border-radius: 12px;
@@ -100,20 +90,63 @@ select {
   display: flex;
   align-items: center;
   gap: 0.45rem;
+  color: var(--team-tertiary);
 }
 
 .count-pill {
   font-size: 0.74rem;
   padding: 0.1rem 0.4rem;
   border-radius: 99px;
-  background: var(--surface-2);
-  color: var(--muted);
+  background: var(--team-secondary);
+  color: var(--team-tertiary);
 }
 
 .column-subtext {
   margin: 0.25rem 0 0.75rem;
   color: var(--muted);
   font-size: 0.85rem;
+}
+
+.column-summary {
+  margin: 0 0 0.8rem;
+  padding: 0.55rem;
+  border-radius: 10px;
+  background: var(--team-primary);
+  border: 1px solid var(--team-secondary);
+  color: var(--team-tertiary);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.35rem 0.55rem;
+}
+
+.column-summary div {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.3rem;
+}
+
+.column-summary dt {
+  font-size: 0.75rem;
+}
+
+.column-summary dd {
+  margin: 0;
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+.roster-column[data-theme="current-team"] {
+  --team-primary: rgb(29, 49, 95);
+  --team-secondary: rgb(91, 165, 209);
+  --team-tertiary: #ffffff;
+  border-color: rgb(91, 165, 209);
+}
+
+.roster-column[data-theme="second-team"] {
+  --team-primary: #ba0c2f;
+  --team-secondary: #b3b8bd;
+  --team-tertiary: #ffffff;
+  border-color: #b3b8bd;
 }
 
 .roster-column.is-valid-target {
