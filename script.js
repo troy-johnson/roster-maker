@@ -7,10 +7,30 @@ const STATUS_OPTIONS = ["full-time", "part-time", "not-playing"];
 const TIER_OPTIONS = [1, 2, 3];
 
 const columns = [
-  { id: "unassigned", title: "Unassigned", description: "No league selected" },
-  { id: "leagueA", title: "League A", description: "Primary League A roster" },
-  { id: "leagueB", title: "League B", description: "Primary League B roster" },
-  { id: "both", title: "Both Leagues", description: "Assigned to League A + League B" }
+  {
+    id: "unassigned",
+    title: "Unassigned",
+    description: "No league selected",
+    theme: "neutral"
+  },
+  {
+    id: "leagueA",
+    title: "League A",
+    description: "Primary League A roster",
+    theme: "current-team"
+  },
+  {
+    id: "leagueB",
+    title: "League B",
+    description: "Primary League B roster",
+    theme: "second-team"
+  },
+  {
+    id: "both",
+    title: "Both Leagues",
+    description: "Assigned to League A + League B",
+    theme: "neutral"
+  }
 ];
 
 const players = [
@@ -233,12 +253,28 @@ function renderColumn(column, visiblePlayers) {
   const wrapper = document.createElement("section");
   wrapper.className = "roster-column";
   wrapper.dataset.columnId = column.id;
+  wrapper.dataset.theme = column.theme;
 
-  const columnCount = visiblePlayers.filter((player) => getColumnForPlayer(player) === column.id).length;
+  const playersInColumn = visiblePlayers.filter((player) => getColumnForPlayer(player) === column.id);
+  const columnCount = playersInColumn.length;
+  const columnStatuses = playersInColumn.map((player) => getStatusesForDestination(player, column.id));
+  const fullTimeCount = columnStatuses.filter(
+    (statuses) => statuses.length > 0 && statuses.every((status) => status === "full-time")
+  ).length;
+  const partTimeCount = columnStatuses.filter(
+    (statuses) => statuses.length > 0 && statuses.every((status) => status === "part-time")
+  ).length;
+  const dualLeagueCount = playersInColumn.filter((player) => player.leagues.length === 2).length;
 
   wrapper.innerHTML = `
     <h2>${column.title} <span class="count-pill">${columnCount}</span></h2>
     <p class="column-subtext">${column.description}</p>
+    <dl class="column-summary" aria-label="${column.title} summary">
+      <div><dt>Total</dt><dd>${columnCount}</dd></div>
+      <div><dt>Full-time</dt><dd>${fullTimeCount}</dd></div>
+      <div><dt>Part-time</dt><dd>${partTimeCount}</dd></div>
+      <div><dt>Dual league</dt><dd>${dualLeagueCount}</dd></div>
+    </dl>
     <div class="player-list"></div>
   `;
 
