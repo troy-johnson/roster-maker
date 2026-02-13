@@ -1,0 +1,154 @@
+:root {
+  --bg: #f5f7fb;
+  --surface: #ffffff;
+  --text: #1e2633;
+  --muted: #5f6b7b;
+  --border: #dce2ea;
+  --drop-valid: #d9f7e6;
+  --drop-invalid: #fde1e1;
+  --accent: #2f6feb;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+
+.board-shell {
+  padding: 1.5rem;
+}
+
+header h1 {
+  margin: 0;
+}
+
+header p {
+  margin-top: 0.25rem;
+  color: var(--muted);
+}
+
+.board {
+  margin-top: 1.25rem;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(220px, 1fr));
+  gap: 1rem;
+  align-items: start;
+}
+
+.roster-column {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  min-height: 380px;
+  padding: 0.75rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+.roster-column h2 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.column-subtext {
+  margin: 0.25rem 0 0.75rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.roster-column.is-valid-target {
+  border-color: #1f8d4f;
+  background-color: var(--drop-valid);
+  box-shadow: 0 0 0 3px rgba(31, 141, 79, 0.15);
+}
+
+.roster-column.is-invalid-target {
+  border-color: #ce4343;
+  background-color: var(--drop-invalid);
+}
+
+.player-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.player-card {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  padding: 0.75rem;
+  cursor: grab;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
+  transition: transform 0.15s ease, opacity 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.player-card.is-dragging {
+  opacity: 0.45;
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 10px 24px rgba(47, 111, 235, 0.25);
+}
+
+.player-card.is-disabled {
+  opacity: 0.5;
+  border-color: #e8b3b3;
+  background: #fff8f8;
+}
+
+.player-name {
+  margin: 0;
+  font-size: 0.98rem;
+}
+
+.badges {
+  margin-top: 0.35rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  padding: 0.2rem 0.45rem;
+  border-radius: 99px;
+  font-weight: 600;
+}
+
+.badge.status-full-time {
+  background: #dbebff;
+  color: #11498c;
+}
+
+.badge.status-part-time {
+  background: #ede7ff;
+  color: #4c2ca8;
+}
+
+.badge.tier {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.assignment {
+  margin-top: 0.55rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+@media (max-width: 1050px) {
+  .board {
+    grid-template-columns: repeat(2, minmax(220px, 1fr));
+  }
+}
+
+@media (max-width: 680px) {
+  .board {
+    grid-template-columns: 1fr;
+  }
+}
