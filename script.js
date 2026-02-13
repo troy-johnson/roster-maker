@@ -174,26 +174,29 @@ function renderCard(player) {
       <span class="badge status-${player.statuses.B}">B: ${titleizeStatus(player.statuses.B)}</span>
     </div>
     <p class="assignment">Current assignment: ${getAssignmentSummary(player)}</p>
-    <div class="card-controls">
-      <label>
-        League A status
-        <select data-control="status" data-league="A">
-          ${STATUS_OPTIONS.map((status) => `<option value="${status}" ${player.statuses.A === status ? "selected" : ""}>${titleizeStatus(status)}</option>`).join("")}
-        </select>
-      </label>
-      <label>
-        League B status
-        <select data-control="status" data-league="B">
-          ${STATUS_OPTIONS.map((status) => `<option value="${status}" ${player.statuses.B === status ? "selected" : ""}>${titleizeStatus(status)}</option>`).join("")}
-        </select>
-      </label>
-      <label>
-        Priority tier
-        <select data-control="tier">
-          ${TIER_OPTIONS.map((tier) => `<option value="${tier}" ${player.tier === tier ? "selected" : ""}>Tier ${tier}</option>`).join("")}
-        </select>
-      </label>
-    </div>
+    <details class="card-controls-panel">
+      <summary class="card-controls-toggle">Edit status/tier</summary>
+      <div class="card-controls">
+        <label>
+          League A status
+          <select data-control="status" data-league="A">
+            ${STATUS_OPTIONS.map((status) => `<option value="${status}" ${player.statuses.A === status ? "selected" : ""}>${titleizeStatus(status)}</option>`).join("")}
+          </select>
+        </label>
+        <label>
+          League B status
+          <select data-control="status" data-league="B">
+            ${STATUS_OPTIONS.map((status) => `<option value="${status}" ${player.statuses.B === status ? "selected" : ""}>${titleizeStatus(status)}</option>`).join("")}
+          </select>
+        </label>
+        <label>
+          Priority tier
+          <select data-control="tier">
+            ${TIER_OPTIONS.map((tier) => `<option value="${tier}" ${player.tier === tier ? "selected" : ""}>Tier ${tier}</option>`).join("")}
+          </select>
+        </label>
+      </div>
+    </details>
   `;
 
   card.addEventListener("change", (event) => {

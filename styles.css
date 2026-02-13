@@ -211,10 +211,56 @@ select {
 }
 
 .card-controls {
-  margin-top: 0.6rem;
+  margin-top: 0.45rem;
   display: grid;
   grid-template-columns: 1fr;
   gap: 0.35rem;
+}
+
+.card-controls-panel {
+  margin-top: 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.35rem 0.5rem 0.5rem;
+  background: color-mix(in srgb, var(--surface-2) 55%, var(--surface));
+}
+
+.card-controls-panel:not([open]) {
+  padding-bottom: 0.35rem;
+}
+
+.card-controls-toggle {
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text);
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.card-controls-toggle::-webkit-details-marker {
+  display: none;
+}
+
+.card-controls-toggle::before {
+  content: "▸";
+  display: inline-block;
+  font-size: 0.72rem;
+  color: var(--muted);
+  transition: transform 0.15s ease;
+}
+
+.card-controls-panel[open] .card-controls-toggle::before {
+  transform: rotate(90deg);
+}
+
+.card-controls-toggle:focus-visible,
+.card-controls-panel select:focus-visible {
+  outline: 2px solid #2f6feb;
+  outline-offset: 2px;
+  border-radius: 6px;
 }
 
 .card-controls label {
