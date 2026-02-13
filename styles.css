@@ -1,12 +1,25 @@
 :root {
   --bg: #f5f7fb;
   --surface: #ffffff;
+  --surface-2: #eef2f8;
   --text: #1e2633;
   --muted: #5f6b7b;
   --border: #dce2ea;
   --drop-valid: #d9f7e6;
   --drop-invalid: #fde1e1;
-  --accent: #2f6feb;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #111826;
+    --surface: #182234;
+    --surface-2: #223048;
+    --text: #e7edf7;
+    --muted: #a7b5cb;
+    --border: #334563;
+    --drop-valid: #123926;
+    --drop-invalid: #4a1f23;
+  }
 }
 
 * {
@@ -33,6 +46,37 @@ header p {
   color: var(--muted);
 }
 
+.board-controls {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(180px, 1fr));
+  gap: 0.6rem;
+  align-items: end;
+}
+
+.board-controls label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+select {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  padding: 0.4rem 0.5rem;
+  border-radius: 8px;
+}
+
+.result-count {
+  margin: 0;
+  font-size: 0.84rem;
+  color: var(--muted);
+  align-self: center;
+}
+
 .board {
   margin-top: 1.25rem;
   display: grid;
@@ -53,6 +97,17 @@ header p {
 .roster-column h2 {
   margin: 0;
   font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.count-pill {
+  font-size: 0.74rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 99px;
+  background: var(--surface-2);
+  color: var(--muted);
 }
 
 .column-subtext {
@@ -84,7 +139,7 @@ header p {
   background: var(--surface);
   padding: 0.75rem;
   cursor: grab;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.12);
   transition: transform 0.15s ease, opacity 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
 }
 
@@ -97,7 +152,6 @@ header p {
 .player-card.is-disabled {
   opacity: 0.5;
   border-color: #e8b3b3;
-  background: #fff8f8;
 }
 
 .player-name {
@@ -117,22 +171,37 @@ header p {
   font-size: 0.75rem;
   padding: 0.2rem 0.45rem;
   border-radius: 99px;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .badge.status-full-time {
-  background: #dbebff;
-  color: #11498c;
+  background: #dbf9e4;
+  color: #125733;
 }
 
 .badge.status-part-time {
-  background: #ede7ff;
-  color: #4c2ca8;
+  background: #ece5ff;
+  color: #4a2a9f;
 }
 
-.badge.tier {
-  background: #f3f4f6;
-  color: #374151;
+.badge.status-not-playing {
+  background: #ffe4e6;
+  color: #8f1d2f;
+}
+
+.badge.tier-1 {
+  background: #ffeab6;
+  color: #7a4b00;
+}
+
+.badge.tier-2 {
+  background: #d9edff;
+  color: #0d4f84;
+}
+
+.badge.tier-3 {
+  background: #e7e8ec;
+  color: #3d4452;
 }
 
 .assignment {
@@ -141,14 +210,35 @@ header p {
   font-size: 0.8rem;
 }
 
-@media (max-width: 1050px) {
-  .board {
+.card-controls {
+  margin-top: 0.6rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.35rem;
+}
+
+.card-controls label {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.22rem;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.card-controls select {
+  font-size: 0.78rem;
+}
+
+@media (max-width: 1180px) {
+  .board,
+  .board-controls {
     grid-template-columns: repeat(2, minmax(220px, 1fr));
   }
 }
 
 @media (max-width: 680px) {
-  .board {
+  .board,
+  .board-controls {
     grid-template-columns: 1fr;
   }
 }

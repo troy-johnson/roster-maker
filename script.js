@@ -3,6 +3,9 @@ const LEAGUES = {
   B: "League B"
 };
 
+const STATUS_OPTIONS = ["full-time", "part-time", "not-playing"];
+const TIER_OPTIONS = [1, 2, 3];
+
 const columns = [
   { id: "unassigned", title: "Unassigned", description: "No league selected" },
   { id: "leagueA", title: "League A", description: "Primary League A roster" },
@@ -11,12 +14,50 @@ const columns = [
 ];
 
 const players = [
-  { id: "p1", name: "Jordan Tate", status: "full-time", tier: 1, leagues: [] },
-  { id: "p2", name: "Sasha Kim", status: "part-time", tier: 2, leagues: ["A"] },
-  { id: "p3", name: "Maya Ibanez", status: "full-time", tier: 2, leagues: ["B"] },
-  { id: "p4", name: "Nolan Pierce", status: "part-time", tier: 3, leagues: [] },
-  { id: "p5", name: "Avery Shah", status: "full-time", tier: 1, leagues: ["A", "B"] }
+  {
+    id: "p1",
+    name: "Jordan Tate",
+    tier: 1,
+    leagues: [],
+    statuses: { A: "full-time", B: "part-time" }
+  },
+  {
+    id: "p2",
+    name: "Sasha Kim",
+    tier: 2,
+    leagues: ["A"],
+    statuses: { A: "part-time", B: "not-playing" }
+  },
+  {
+    id: "p3",
+    name: "Maya Ibanez",
+    tier: 2,
+    leagues: ["B"],
+    statuses: { A: "not-playing", B: "full-time" }
+  },
+  {
+    id: "p4",
+    name: "Nolan Pierce",
+    tier: 3,
+    leagues: [],
+    statuses: { A: "part-time", B: "not-playing" }
+  },
+  {
+    id: "p5",
+    name: "Avery Shah",
+    tier: 1,
+    leagues: ["A", "B"],
+    statuses: { A: "full-time", B: "full-time" }
+  }
 ];
+
+const uiState = {
+  filters: {
+    tier: "all",
+    status: "all"
+  },
+  sort: "priority-name"
+};
 
 let draggingPlayerId = null;
 
@@ -32,23 +73,41 @@ function getColumnForPlayer(player) {
   return player.leagues[0] === "A" ? "leagueA" : "leagueB";
 }
 
+function getStatusesForDestination(player, destinationId) {
+  if (destinationId === "unassigned") return [];
+  if (destinationId === "leagueA") return [player.statuses.A];
+  if (destinationId === "leagueB") return [player.statuses.B];
+  return [player.statuses.A, player.statuses.B];
+}
+
 function canAssign(player, destinationId) {
   if (!player) return false;
   if (destinationId === "unassigned") return true;
 
-  const destinationLeagues = destinationId === "leagueA"
-    ? ["A"]
-    : destinationId === "leagueB"
-      ? ["B"]
-      : ["A", "B"];
+  const destinationLeagues =
+    destinationId === "leagueA"
+      ? ["A"]
+      : destinationId === "leagueB"
+        ? ["B"]
+        : ["A", "B"];
 
   // business rule: part-time tier 3 players cannot be in both leagues
-  if (destinationLeagues.length === 2 && player.status === "part-time" && player.tier === 3) {
+  if (
+    destinationLeagues.length === 2
+    && destinationLeagues.every((league) => player.statuses[league] === "part-time")
+    && player.tier === 3
+  ) {
     return false;
   }
 
   // business rule: tier 3 players cannot move into League B only
   if (destinationId === "leagueB" && player.tier === 3) {
+    return false;
+  }
+
+  // business rule: players cannot be assigned to leagues marked not-playing
+  const destinationStatuses = getStatusesForDestination(player, destinationId);
+  if (destinationStatuses.includes("not-playing")) {
     return false;
   }
 
@@ -74,6 +133,33 @@ function assignPlayer(player, destinationId) {
   player.leagues = ["A", "B"];
 }
 
+function titleizeStatus(status) {
+  return status.replace("-", " ");
+}
+
+function getFilteredAndSortedPlayers() {
+  return players
+    .filter((player) => {
+      if (uiState.filters.tier !== "all" && player.tier !== Number(uiState.filters.tier)) {
+        return false;
+      }
+
+      if (uiState.filters.status !== "all") {
+        const hasStatus = Object.values(player.statuses).includes(uiState.filters.status);
+        if (!hasStatus) return false;
+      }
+
+      return true;
+    })
+    .sort((a, b) => {
+      if (uiState.sort === "priority-name") {
+        if (a.tier !== b.tier) return a.tier - b.tier;
+        return a.name.localeCompare(b.name);
+      }
+      return 0;
+    });
+}
+
 function renderCard(player) {
   const card = document.createElement("article");
   card.className = "player-card";
@@ -83,11 +169,48 @@ function renderCard(player) {
   card.innerHTML = `
     <h3 class="player-name">${player.name}</h3>
     <div class="badges">
-      <span class="badge status-${player.status}">${player.status}</span>
-      <span class="badge tier">Tier ${player.tier}</span>
+      <span class="badge tier tier-${player.tier}">Tier ${player.tier}</span>
+      <span class="badge status-${player.statuses.A}">A: ${titleizeStatus(player.statuses.A)}</span>
+      <span class="badge status-${player.statuses.B}">B: ${titleizeStatus(player.statuses.B)}</span>
     </div>
     <p class="assignment">Current assignment: ${getAssignmentSummary(player)}</p>
+    <div class="card-controls">
+      <label>
+        League A status
+        <select data-control="status" data-league="A">
+          ${STATUS_OPTIONS.map((status) => `<option value="${status}" ${player.statuses.A === status ? "selected" : ""}>${titleizeStatus(status)}</option>`).join("")}
+        </select>
+      </label>
+      <label>
+        League B status
+        <select data-control="status" data-league="B">
+          ${STATUS_OPTIONS.map((status) => `<option value="${status}" ${player.statuses.B === status ? "selected" : ""}>${titleizeStatus(status)}</option>`).join("")}
+        </select>
+      </label>
+      <label>
+        Priority tier
+        <select data-control="tier">
+          ${TIER_OPTIONS.map((tier) => `<option value="${tier}" ${player.tier === tier ? "selected" : ""}>Tier ${tier}</option>`).join("")}
+        </select>
+      </label>
+    </div>
   `;
+
+  card.addEventListener("change", (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLSelectElement)) return;
+
+    if (target.dataset.control === "status") {
+      player.statuses[target.dataset.league] = target.value;
+      player.leagues = player.leagues.filter((league) => player.statuses[league] !== "not-playing");
+    }
+
+    if (target.dataset.control === "tier") {
+      player.tier = Number(target.value);
+    }
+
+    renderBoard();
+  });
 
   card.addEventListener("dragstart", (event) => {
     draggingPlayerId = player.id;
@@ -106,13 +229,15 @@ function renderCard(player) {
   return card;
 }
 
-function renderColumn(column) {
+function renderColumn(column, visiblePlayers) {
   const wrapper = document.createElement("section");
   wrapper.className = "roster-column";
   wrapper.dataset.columnId = column.id;
 
+  const columnCount = visiblePlayers.filter((player) => getColumnForPlayer(player) === column.id).length;
+
   wrapper.innerHTML = `
-    <h2>${column.title}</h2>
+    <h2>${column.title} <span class="count-pill">${columnCount}</span></h2>
     <p class="column-subtext">${column.description}</p>
     <div class="player-list"></div>
   `;
@@ -157,6 +282,50 @@ function renderColumn(column) {
   return wrapper;
 }
 
+function renderToolbar() {
+  const toolbar = document.querySelector("#board-controls");
+  const visiblePlayers = getFilteredAndSortedPlayers();
+
+  toolbar.innerHTML = `
+    <label>
+      Filter by tier
+      <select id="filter-tier">
+        <option value="all" ${uiState.filters.tier === "all" ? "selected" : ""}>All tiers</option>
+        ${TIER_OPTIONS.map((tier) => `<option value="${tier}" ${String(tier) === uiState.filters.tier ? "selected" : ""}>Tier ${tier}</option>`).join("")}
+      </select>
+    </label>
+    <label>
+      Filter by status
+      <select id="filter-status">
+        <option value="all" ${uiState.filters.status === "all" ? "selected" : ""}>Any status</option>
+        ${STATUS_OPTIONS.map((status) => `<option value="${status}" ${uiState.filters.status === status ? "selected" : ""}>${titleizeStatus(status)}</option>`).join("")}
+      </select>
+    </label>
+    <label>
+      Sort
+      <select id="sort-order">
+        <option value="priority-name" selected>Priority then alphabetical</option>
+      </select>
+    </label>
+    <p class="result-count">Showing ${visiblePlayers.length} of ${players.length} players</p>
+  `;
+
+  toolbar.querySelector("#filter-tier").addEventListener("change", (event) => {
+    uiState.filters.tier = event.target.value;
+    renderBoard();
+  });
+
+  toolbar.querySelector("#filter-status").addEventListener("change", (event) => {
+    uiState.filters.status = event.target.value;
+    renderBoard();
+  });
+
+  toolbar.querySelector("#sort-order").addEventListener("change", (event) => {
+    uiState.sort = event.target.value;
+    renderBoard();
+  });
+}
+
 function updateDropTargetStates() {
   const player = players.find((p) => p.id === draggingPlayerId);
   const cols = document.querySelectorAll(".roster-column");
@@ -175,14 +344,17 @@ function clearColumnStates() {
 }
 
 function renderBoard() {
+  renderToolbar();
+
   const board = document.querySelector("#board");
+  const visiblePlayers = getFilteredAndSortedPlayers();
   board.innerHTML = "";
 
   columns.forEach((column) => {
-    const columnEl = renderColumn(column);
+    const columnEl = renderColumn(column, visiblePlayers);
     const listEl = columnEl.querySelector(".player-list");
 
-    players
+    visiblePlayers
       .filter((player) => getColumnForPlayer(player) === column.id)
       .forEach((player) => {
         const card = renderCard(player);
