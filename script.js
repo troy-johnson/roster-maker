@@ -23,7 +23,9 @@ const players = [
     primaryPosition: "D",
     secondaryPosition: "D",
     priorityTier: "Tier 1",
-    leagueStatus: { county: "full time", mic: "full time" }
+    leagueStatus: { county: "full time", mic: "full time" },
+    isInjuredReserve: false,
+    isOnVacation: false,
   },
   {
     id: "p7",
@@ -31,7 +33,9 @@ const players = [
     primaryPosition: "F",
     secondaryPosition: "F",
     priorityTier: "Tier 1",
-    leagueStatus: { county: "full time", mic: "full time" }
+    leagueStatus: { county: "full time", mic: "full time" },
+    isInjuredReserve: false,
+    isOnVacation: false,
   },
   {
     id: "p8",
@@ -39,7 +43,9 @@ const players = [
     primaryPosition: "F",
     secondaryPosition: "F",
     priorityTier: "Tier 1",
-    leagueStatus: { county: "full time", mic: "full time" }
+    leagueStatus: { county: "full time", mic: "full time" },
+    isInjuredReserve: false,
+    isOnVacation: false,
   },
   {
     id: "p9",
@@ -47,7 +53,9 @@ const players = [
     primaryPosition: "F",
     secondaryPosition: "F",
     priorityTier: "Tier 1",
-    leagueStatus: { county: "full time", mic: "full time" }
+    leagueStatus: { county: "full time", mic: "full time" },
+    isInjuredReserve: false,
+    isOnVacation: false,
   },
   {
     id: "p10",
@@ -55,7 +63,9 @@ const players = [
     primaryPosition: "D",
     secondaryPosition: "D",
     priorityTier: "Tier 1",
-    leagueStatus: { county: "full time", mic: "full time" }
+    leagueStatus: { county: "full time", mic: "full time" },
+    isInjuredReserve: false,
+    isOnVacation: false,
   },
   {
     id: "p11",
@@ -63,7 +73,9 @@ const players = [
     primaryPosition: "F",
     secondaryPosition: "F",
     priorityTier: "Tier 1",
-    leagueStatus: { county: "full time", mic: "full time" }
+    leagueStatus: { county: "full time", mic: "full time" },
+    isInjuredReserve: false,
+    isOnVacation: false,
   },
   {
     id: "p12",
@@ -71,7 +83,9 @@ const players = [
     primaryPosition: "F",
     secondaryPosition: "F",
     priorityTier: "Tier 1",
-    leagueStatus: { county: "full time", mic: "full time" }
+    leagueStatus: { county: "full time", mic: "full time" },
+    isInjuredReserve: false,
+    isOnVacation: false,
   },
   {
     id: "p13",
@@ -79,7 +93,9 @@ const players = [
     primaryPosition: "F",
     secondaryPosition: "D",
     priorityTier: "Tier 1",
-    leagueStatus: { county: "full time", mic: "full time" }
+    leagueStatus: { county: "full time", mic: "full time" },
+    isInjuredReserve: false,
+    isOnVacation: false,
   },
   {
     id: "p14",
@@ -87,7 +103,9 @@ const players = [
     primaryPosition: "F",
     secondaryPosition: "F",
     priorityTier: "Tier 1",
-    leagueStatus: { county: "non-roster", mic: "non-roster" }
+    leagueStatus: { county: "non-roster", mic: "non-roster" },
+    isOnVacation: true,
+    isInjuredReserve: false,
   },
   {
     id: "p15",
@@ -95,7 +113,9 @@ const players = [
     primaryPosition: "D",
     secondaryPosition: "F",
     priorityTier: "Tier 1",
-    leagueStatus: { county: "full time", mic: "full time" }
+    leagueStatus: { county: "full time", mic: "full time" },
+    isInjuredReserve: false,
+    isOnVacation: false,
   },
   {
     id: "p16",
@@ -103,7 +123,9 @@ const players = [
     primaryPosition: "G",
     secondaryPosition: "G",
     priorityTier: "Tier 1",
-    leagueStatus: { county: "full time", mic: "full time" }
+    leagueStatus: { county: "full time", mic: "full time" },
+    isInjuredReserve: false,
+    isOnVacation: false,
   },
   {
     id: "p17",
@@ -111,7 +133,9 @@ const players = [
     primaryPosition: "F",
     secondaryPosition: "D",
     priorityTier: "Tier 1",
-    leagueStatus: { county: "part time", mic: "full time" }
+    leagueStatus: { county: "part time", mic: "full time" },
+    isInjuredReserve: false,
+    isOnVacation: false,
   },
   {
     id: "p18",
@@ -119,7 +143,9 @@ const players = [
     primaryPosition: "D",
     secondaryPosition: "D",
     priorityTier: "Tier 1",
-    leagueStatus: { county: "part time", mic: "full time" }
+    leagueStatus: { county: "part time", mic: "full time" },
+    isInjuredReserve: false,
+    isOnVacation: false,
   },
   {
     id: "p19",
@@ -127,7 +153,9 @@ const players = [
     primaryPosition: "F",
     secondaryPosition: "D",
     priorityTier: "Tier 1",
-    leagueStatus: { county: "non-roster", mic: "non-roster" }
+    leagueStatus: { county: "non-roster", mic: "non-roster" },
+    isInjuredReserve: false,
+    isOnVacation: false,
   },
   {
     id: "p20",
@@ -135,7 +163,9 @@ const players = [
     primaryPosition: "F",
     secondaryPosition: "F",
     priorityTier: "Tier 1",
-    leagueStatus: { county: "non-roster", mic: "non-roster" }
+    leagueStatus: { county: "non-roster", mic: "non-roster" },
+    isInjuredReserve: false,
+    isOnVacation: false,
   },
   {
     id: "p21",
@@ -143,7 +173,9 @@ const players = [
     primaryPosition: "F",
     secondaryPosition: "F",
     priorityTier: "Tier 1",
-    leagueStatus: { county: "non-roster", mic: "non-roster" }
+    leagueStatus: { county: "non-roster", mic: "non-roster" },
+    isInjuredReserve: false,
+    isOnVacation: false,
   },
   {
     id: "p22",
@@ -151,7 +183,9 @@ const players = [
     primaryPosition: "D",
     secondaryPosition: "D",
     priorityTier: "Tier 1",
-    leagueStatus: { county: "non-roster", mic: "non-roster" }
+    leagueStatus: { county: "non-roster", mic: "non-roster" },
+    isInjuredReserve: false,
+    isOnVacation: false,
   },
   {
     id: "p23",
@@ -159,7 +193,9 @@ const players = [
     primaryPosition: "F",
     secondaryPosition: "F",
     priorityTier: "Tier 1",
-    leagueStatus: { county: "non-roster", mic: "non-roster" }
+    leagueStatus: { county: "non-roster", mic: "non-roster" },
+    isInjuredReserve: false,
+    isOnVacation: false,
   },
   {
     id: "p24",
@@ -167,7 +203,9 @@ const players = [
     primaryPosition: "F",
     secondaryPosition: "D",
     priorityTier: "Tier 1",
-    leagueStatus: { county: "non-roster", mic: "non-roster" }
+    leagueStatus: { county: "non-roster", mic: "non-roster" },
+    isInjuredReserve: false,
+    isOnVacation: false,
   },
   {
     id: "p25",
@@ -175,7 +213,9 @@ const players = [
     primaryPosition: "F",
     secondaryPosition: "D",
     priorityTier: "Tier 1",
-    leagueStatus: { county: "non-roster", mic: "non-roster" }
+    leagueStatus: { county: "non-roster", mic: "non-roster" },
+    isInjuredReserve: false,
+    isOnVacation: false,
   },
   {
     id: "p26",
@@ -183,7 +223,9 @@ const players = [
     primaryPosition: "F",
     secondaryPosition: "F",
     priorityTier: "Tier 1",
-    leagueStatus: { county: "non-roster", mic: "non-roster" }
+    leagueStatus: { county: "non-roster", mic: "non-roster" },
+    isInjuredReserve: true,
+    isOnVacation: false,
   },
   {
     id: "p27",
@@ -191,7 +233,9 @@ const players = [
     primaryPosition: "F",
     secondaryPosition: "F",
     priorityTier: "Tier 1",
-    leagueStatus: { county: "non-roster", mic: "non-roster" }
+    leagueStatus: { county: "non-roster", mic: "non-roster" },
+    isInjuredReserve: true,
+    isOnVacation: false,
   },
   {
     id: "p28",
@@ -199,9 +243,12 @@ const players = [
     primaryPosition: "G",
     secondaryPosition: "D",
     priorityTier: "Tier 1",
-    leagueStatus: { county: "part time", mic: "part time" }
+    leagueStatus: { county: "part time", mic: "part time" },
+    isInjuredReserve: false,
+    isOnVacation: false,
   }
 ];
+
 
 const uiState = {
   filters: {
@@ -299,6 +346,8 @@ function buildPlayerManagementColumn(visiblePlayers) {
   sortedPlayers.forEach((player) => {
     const isCountyOptedIn = player.leagueStatus.county !== "non-roster";
     const isMicOptedIn = player.leagueStatus.mic !== "non-roster";
+    const isInjuredReserve = Boolean(player.isInjuredReserve);
+    const isOnVacation = Boolean(player.isOnVacation);
     const row = document.createElement("div");
     row.className = "player-row";
 
@@ -310,6 +359,27 @@ function buildPlayerManagementColumn(visiblePlayers) {
             <span class="team-tags" aria-label="Team signup status">
               <span class="team-tag ${isCountyOptedIn ? "team-tag-active-county" : ""}">CTY</span>
               <span class="team-tag ${isMicOptedIn ? "team-tag-active-mic" : ""}">MIC</span>
+              ${
+                isInjuredReserve
+                  ? `<span class="team-tag team-tag-ir" aria-label="Injured reserve" title="Injured reserve">
+                      <svg viewBox="0 0 16 16" role="img" aria-hidden="true" focusable="false">
+                        <circle cx="8" cy="8" r="7" />
+                        <path d="M8 4.3v7.4M4.3 8h7.4" />
+                      </svg>
+                    </span>`
+                  : ""
+              }
+              ${
+                isOnVacation
+                  ? `<span class="team-tag team-tag-vacation" aria-label="On vacation" title="On vacation">
+                      <svg viewBox="0 0 16 16" role="img" aria-hidden="true" focusable="false">
+                        <rect x="2.5" y="5" width="11" height="8.5" rx="1.6" />
+                        <path d="M5 5V4a3 3 0 0 1 6 0v1" />
+                        <path d="M2.5 8h11" />
+                      </svg>
+                    </span>`
+                  : ""
+              }
             </span>
           </span>
           <span class="summary-caret" aria-hidden="true">▾</span>
