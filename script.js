@@ -133,7 +133,7 @@ const players = [
     primaryPosition: "F",
     secondaryPosition: "D",
     priorityTier: "Tier 1",
-    leagueStatus: { county: "part time", mic: "full time" },
+    leagueStatus: { county: "full time", mic: "full time" },
     isInjuredReserve: false,
     isOnVacation: false,
   },
@@ -474,7 +474,15 @@ function buildRosterSection(title, sectionPlayers, className = "", playersPerLin
       <h3>${title} <span class="count-pill">${sectionPlayers.length}</span></h3>
       ${sectionPlayers.length > 0
         ? playerLines
-            .map((linePlayers) => `<p class="roster-line">${linePlayers.map((player) => player.name).join(" • ")}</p>`)
+            .map(
+              (linePlayers) => `
+                <p class="roster-line" style="--line-columns: ${playersPerLine};">
+                  ${linePlayers
+                    .map((player) => `<span class="roster-player-slot">${player.name}</span>`)
+                    .join("")}
+                </p>
+              `
+            )
             .join("")
         : '<p class="empty-message">No players in this section.</p>'}
     </section>
@@ -499,10 +507,12 @@ function buildLeagueColumn(leagueKey, visiblePlayers) {
   const partTimePlayers = assignedPlayers.filter((player) => player.status === "part time");
 
   const byPosition = {
-    F: fullTimePlayers.filter((player) => player.primaryPosition === "F").sort((a, b) => a.name.localeCompare(b.name)),
-    D: fullTimePlayers.filter((player) => player.primaryPosition === "D").sort((a, b) => a.name.localeCompare(b.name)),
-    G: fullTimePlayers.filter((player) => player.primaryPosition === "G").sort((a, b) => a.name.localeCompare(b.name))
+    F: fullTimePlayers.filter((player) => player.primaryPosition === "F").sort(sortPlayersByLastName),
+    D: fullTimePlayers.filter((player) => player.primaryPosition === "D").sort(sortPlayersByLastName),
+    G: fullTimePlayers.filter((player) => player.primaryPosition === "G").sort(sortPlayersByLastName)
   };
+
+  const sortedPartTimePlayers = [...partTimePlayers].sort(sortPlayersByLastName);
 
 
   const column = document.createElement("section");
@@ -522,7 +532,7 @@ function buildLeagueColumn(leagueKey, visiblePlayers) {
       ${buildRosterSection("Forward", byPosition.F, "forward-section", 3)}
       ${buildRosterSection("Defense", byPosition.D, "defense-section", 2)}
       ${buildRosterSection("Goalie", byPosition.G, "goalie-section")}
-      ${buildRosterSection("Part Time", partTimePlayers, "subs-section")}
+      ${buildRosterSection("Part Time", sortedPartTimePlayers, "subs-section")}
     </div>
   `;
 
