@@ -213,7 +213,7 @@ const players = [
     primaryPosition: "F",
     secondaryPosition: "D",
     priorityTier: "Tier 1",
-    leagueStatus: { county: "non-roster", mic: "non-roster" },
+    leagueStatus: { county: "full time", mic: "full time" },
     isInjuredReserve: false,
     isOnVacation: false,
   },
@@ -455,15 +455,26 @@ function buildPlayerManagementColumn(visiblePlayers) {
   return column;
 }
 
-function buildRosterSection(title, sectionPlayers, className = "") {
+function chunkPlayers(players, size) {
+  if (size <= 0) return [players];
+
+  const chunks = [];
+  for (let i = 0; i < players.length; i += size) {
+    chunks.push(players.slice(i, i + size));
+  }
+
+  return chunks;
+}
+
+function buildRosterSection(title, sectionPlayers, className = "", playersPerLine = 1) {
+  const playerLines = chunkPlayers(sectionPlayers, playersPerLine);
+
   return `
     <section class="roster-group ${className}">
       <h3>${title} <span class="count-pill">${sectionPlayers.length}</span></h3>
       ${sectionPlayers.length > 0
-        ? sectionPlayers
-            .map(
-              (player) => `<p class="roster-line">${player.name} - ${player.position}</p>`
-            )
+        ? playerLines
+            .map((linePlayers) => `<p class="roster-line">${linePlayers.map((player) => player.name).join(" • ")}</p>`)
             .join("")
         : '<p class="empty-message">No players in this section.</p>'}
     </section>
@@ -508,8 +519,8 @@ function buildLeagueColumn(leagueKey, visiblePlayers) {
       </span>
     </h2>
     <div class="line-list roster-sections">
-      ${buildRosterSection("Forward", byPosition.F, "forward-section")}
-      ${buildRosterSection("Defense", byPosition.D, "defense-section")}
+      ${buildRosterSection("Forward", byPosition.F, "forward-section", 3)}
+      ${buildRosterSection("Defense", byPosition.D, "defense-section", 2)}
       ${buildRosterSection("Goalie", byPosition.G, "goalie-section")}
       ${buildRosterSection("Part Time", partTimePlayers, "subs-section")}
     </div>
