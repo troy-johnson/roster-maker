@@ -280,12 +280,24 @@ select {
 }
 
 .roster-line {
-  margin: 0;
+  margin: 0.2rem 0;
   font-size: 0.9rem;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.4rem;
+  display: grid;
+  grid-template-columns: repeat(var(--line-columns, 1), minmax(0, 1fr));
+  gap: 0.6rem;
+}
+
+.roster-player-slot {
+  display: block;
+  width: 100%;
+  margin: 0.1rem;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid color-mix(in srgb, var(--border), transparent 30%);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.02);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .empty-message {
