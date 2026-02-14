@@ -276,6 +276,20 @@ function getLastName(name) {
   return nameParts[nameParts.length - 1].toLowerCase();
 }
 
+function getMobileRosterName(name) {
+  const nameParts = name.trim().split(/\s+/);
+  if (nameParts.length <= 1) return name;
+
+  const firstInitial = `${nameParts[0][0]}.`;
+  const lastName = nameParts[nameParts.length - 1];
+  return `${firstInitial} ${lastName}`;
+}
+
+function getRosterDisplayName(name) {
+  const isMobile = window.matchMedia("(max-width: 768px)").matches;
+  return isMobile ? getMobileRosterName(name) : name;
+}
+
 function sortPlayersByLastName(a, b) {
   const lastNameComparison = getLastName(a.name).localeCompare(getLastName(b.name));
   if (lastNameComparison !== 0) return lastNameComparison;
@@ -478,7 +492,7 @@ function buildRosterSection(title, sectionPlayers, className = "", playersPerLin
               (linePlayers) => `
                 <p class="roster-line" style="--line-columns: ${playersPerLine};">
                   ${linePlayers
-                    .map((player) => `<span class="roster-player-slot">${player.name}</span>`)
+                    .map((player) => `<span class="roster-player-slot">${getRosterDisplayName(player.name)}</span>`)
                     .join("")}
                 </p>
               `
@@ -552,3 +566,5 @@ function renderBoard() {
 }
 
 renderBoard();
+
+window.addEventListener("resize", renderBoard);
