@@ -70,6 +70,12 @@ select {
   align-items: start;
 }
 
+@media (min-width: 1181px) {
+  .board {
+    grid-template-columns: minmax(260px, 25vw) 1fr 1fr;
+  }
+}
+
 .roster-column {
   background: var(--surface);
   border: 2px solid var(--border);
@@ -275,6 +281,18 @@ select {
   .board,
   .board-controls {
     grid-template-columns: 1fr;
+  }
+
+  .board .league-county {
+    order: 1;
+  }
+
+  .board .league-mic {
+    order: 2;
+  }
+
+  .board .players-column {
+    order: 3;
   }
 }
 
