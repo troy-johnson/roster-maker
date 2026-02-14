@@ -20,44 +20,188 @@ const LEAGUE_STATUS_PRIORITY = {
 
 const players = [
   {
-    id: "p1",
-    name: "Jordan Tate",
-    primaryPosition: "F",
+    id: "p6",
+    name: "Troy Johnson",
+    primaryPosition: "D",
     secondaryPosition: "D",
     priorityTier: "Tier 1",
-    leagueStatus: { county: "full time", mic: "part time" }
+    leagueStatus: { county: "full time", mic: "full time" }
   },
   {
-    id: "p2",
-    name: "Sasha Kim",
-    primaryPosition: "D",
-    secondaryPosition: "G",
-    priorityTier: "Tier 2",
-    leagueStatus: { county: "part time", mic: "non-roster" }
-  },
-  {
-    id: "p3",
-    name: "Maya Ibanez",
-    primaryPosition: "G",
-    secondaryPosition: "G",
-    priorityTier: "Tier 1",
-    leagueStatus: { county: "non-roster", mic: "full time" }
-  },
-  {
-    id: "p4",
-    name: "Nolan Pierce",
+    id: "p7",
+    name: "Eric Capps",
     primaryPosition: "F",
-    secondaryPosition: "G",
-    priorityTier: "Tier 3",
-    leagueStatus: { county: "non-roster", mic: "non-roster" }
+    secondaryPosition: "F",
+    priorityTier: "Tier 1",
+    leagueStatus: { county: "full time", mic: "full time" }
   },
   {
-    id: "p5",
-    name: "Avery Shah",
+    id: "p8",
+    name: "Gracie Capps",
+    primaryPosition: "F",
+    secondaryPosition: "F",
+    priorityTier: "Tier 1",
+    leagueStatus: { county: "full time", mic: "full time" }
+  },
+  {
+    id: "p9",
+    name: "Mike Thompson",
+    primaryPosition: "F",
+    secondaryPosition: "F",
+    priorityTier: "Tier 1",
+    leagueStatus: { county: "full time", mic: "full time" }
+  },
+  {
+    id: "p10",
+    name: "Stefan Wilson",
+    primaryPosition: "D",
+    secondaryPosition: "D",
+    priorityTier: "Tier 1",
+    leagueStatus: { county: "full time", mic: "full time" }
+  },
+  {
+    id: "p11",
+    name: "Marcus Capps",
+    primaryPosition: "F",
+    secondaryPosition: "F",
+    priorityTier: "Tier 1",
+    leagueStatus: { county: "full time", mic: "full time" }
+  },
+  {
+    id: "p12",
+    name: "Jay Bartlett",
+    primaryPosition: "F",
+    secondaryPosition: "F",
+    priorityTier: "Tier 1",
+    leagueStatus: { county: "full time", mic: "full time" }
+  },
+  {
+    id: "p13",
+    name: "Chris Browne",
     primaryPosition: "F",
     secondaryPosition: "D",
     priorityTier: "Tier 1",
     leagueStatus: { county: "full time", mic: "full time" }
+  },
+  {
+    id: "p14",
+    name: "Ned White",
+    primaryPosition: "F",
+    secondaryPosition: "F",
+    priorityTier: "Tier 1",
+    leagueStatus: { county: "full time", mic: "full time" }
+  },
+  {
+    id: "p15",
+    name: "John Pereira",
+    primaryPosition: "D",
+    secondaryPosition: "F",
+    priorityTier: "Tier 1",
+    leagueStatus: { county: "full time", mic: "full time" }
+  },
+  {
+    id: "p16",
+    name: "Scott Wade",
+    primaryPosition: "G",
+    secondaryPosition: "G",
+    priorityTier: "Tier 1",
+    leagueStatus: { county: "full time", mic: "full time" }
+  },
+  {
+    id: "p17",
+    name: "Christiaan O'Connor",
+    primaryPosition: "F",
+    secondaryPosition: "D",
+    priorityTier: "Tier 1",
+    leagueStatus: { county: "part time", mic: "full time" }
+  },
+  {
+    id: "p18",
+    name: "Chad Linville",
+    primaryPosition: "D",
+    secondaryPosition: "D",
+    priorityTier: "Tier 1",
+    leagueStatus: { county: "part time", mic: "full time" }
+  },
+  {
+    id: "p19",
+    name: "Ben Smith",
+    primaryPosition: "F",
+    secondaryPosition: "D",
+    priorityTier: "Tier 1",
+    leagueStatus: { county: "non-roster", mic: "non-roster" }
+  },
+  {
+    id: "p20",
+    name: "Blake Moss",
+    primaryPosition: "F",
+    secondaryPosition: "F",
+    priorityTier: "Tier 1",
+    leagueStatus: { county: "non-roster", mic: "non-roster" }
+  },
+  {
+    id: "p21",
+    name: "Dave Mohr",
+    primaryPosition: "F",
+    secondaryPosition: "F",
+    priorityTier: "Tier 1",
+    leagueStatus: { county: "non-roster", mic: "non-roster" }
+  },
+  {
+    id: "p22",
+    name: "Max Gesteland",
+    primaryPosition: "D",
+    secondaryPosition: "D",
+    priorityTier: "Tier 1",
+    leagueStatus: { county: "non-roster", mic: "non-roster" }
+  },
+  {
+    id: "p23",
+    name: "Mikko Anderson",
+    primaryPosition: "F",
+    secondaryPosition: "F",
+    priorityTier: "Tier 1",
+    leagueStatus: { county: "non-roster", mic: "non-roster" }
+  },
+  {
+    id: "p24",
+    name: "Per Gseteland",
+    primaryPosition: "F",
+    secondaryPosition: "D",
+    priorityTier: "Tier 1",
+    leagueStatus: { county: "non-roster", mic: "non-roster" }
+  },
+  {
+    id: "p25",
+    name: "Quinn Pereira",
+    primaryPosition: "F",
+    secondaryPosition: "D",
+    priorityTier: "Tier 1",
+    leagueStatus: { county: "non-roster", mic: "non-roster" }
+  },
+  {
+    id: "p26",
+    name: "Rich Greenberg",
+    primaryPosition: "F",
+    secondaryPosition: "F",
+    priorityTier: "Tier 1",
+    leagueStatus: { county: "non-roster", mic: "non-roster" }
+  },
+  {
+    id: "p27",
+    name: "Jake Barnes",
+    primaryPosition: "F",
+    secondaryPosition: "F",
+    priorityTier: "Tier 1",
+    leagueStatus: { county: "non-roster", mic: "non-roster" }
+  },
+  {
+    id: "p28",
+    name: "Reid Jacobson",
+    primaryPosition: "G",
+    secondaryPosition: "D",
+    priorityTier: "Tier 1",
+    leagueStatus: { county: "part time", mic: "part time" }
   }
 ];
 
