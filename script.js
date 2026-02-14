@@ -89,7 +89,7 @@ const players = [
     primaryPosition: "F",
     secondaryPosition: "F",
     priorityTier: "Tier 1",
-    leagueStatus: { county: "full time", mic: "full time" }
+    leagueStatus: { county: "non-roster", mic: "non-roster" }
   },
   {
     id: "p15",
@@ -226,6 +226,18 @@ function getDisplayPosition(player) {
   return `${player.primaryPosition}/${player.secondaryPosition}`;
 }
 
+function getLastName(name) {
+  const nameParts = name.trim().split(/\s+/);
+  return nameParts[nameParts.length - 1].toLowerCase();
+}
+
+function sortPlayersByLastName(a, b) {
+  const lastNameComparison = getLastName(a.name).localeCompare(getLastName(b.name));
+  if (lastNameComparison !== 0) return lastNameComparison;
+
+  return a.name.localeCompare(b.name);
+}
+
 function sortRosterPlayers(a, b) {
   const statusRank = LEAGUE_STATUS_PRIORITY[a.status] - LEAGUE_STATUS_PRIORITY[b.status];
   if (statusRank !== 0) return statusRank;
@@ -285,7 +297,11 @@ function buildPlayerManagementColumn(visiblePlayers) {
 
   const list = column.querySelector("#players-list");
 
-  visiblePlayers.forEach((player) => {
+  const sortedPlayers = [...visiblePlayers].sort(sortPlayersByLastName);
+
+  sortedPlayers.forEach((player) => {
+    const isCountyOptedIn = player.leagueStatus.county !== "non-roster";
+    const isMicOptedIn = player.leagueStatus.mic !== "non-roster";
     const row = document.createElement("div");
     row.className = "player-row";
 
@@ -294,7 +310,10 @@ function buildPlayerManagementColumn(visiblePlayers) {
         <summary>
           <span class="summary-main">
             <span class="player-name">${player.name}</span>
-            <span class="summary-description">player settings</span>
+            <span class="team-tags" aria-label="Team signup status">
+              <span class="team-tag ${isCountyOptedIn ? "team-tag-active-county" : ""}">CTY</span>
+              <span class="team-tag ${isMicOptedIn ? "team-tag-active-mic" : ""}">MIC</span>
+            </span>
           </span>
           <span class="summary-caret" aria-hidden="true">▾</span>
         </summary>
@@ -354,6 +373,13 @@ function buildPlayerManagementColumn(visiblePlayers) {
         player.leagueStatus[leagueKey] = event.target.value;
         renderBoard();
       });
+    });
+
+    const accordion = row.querySelector(".status-accordion");
+    row.addEventListener("click", (event) => {
+      if (event.target.closest(".accordion-content")) return;
+      if (event.target.closest("summary")) return;
+      accordion.open = !accordion.open;
     });
 
     list.appendChild(row);
