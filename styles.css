@@ -180,6 +180,47 @@ select {
   color: #8ecbff;
 }
 
+.team-tag-ir {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #f26b6b;
+}
+
+.team-tag-ir svg {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.team-tag-ir circle,
+.team-tag-ir path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+}
+
+.team-tag-vacation {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #f2c26b;
+}
+
+.team-tag-vacation svg {
+  width: 0.8rem;
+  height: 0.8rem;
+}
+
+.team-tag-vacation rect,
+.team-tag-vacation path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 .inline-field {
   display: grid;
   gap: 0.25rem;
