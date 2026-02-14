@@ -1,11 +1,9 @@
 const LEAGUES = {
   county: {
-    name: "SLC County",
-    description: "Players currently rostered for county play."
+    name: "SLC County"
   },
   mic: {
-    name: "Mammoth Ice Center",
-    description: "Players currently rostered for MIC play."
+    name: "Mammoth Ice Center"
   }
 };
 
@@ -291,7 +289,6 @@ function buildPlayerManagementColumn(visiblePlayers) {
 
   column.innerHTML = `
     <h2>Players <span class="count-pill">${visiblePlayers.length}</span></h2>
-    <p class="column-subtext">Expand each player to edit player settings and roster statuses.</p>
     <div class="line-list" id="players-list"></div>
   `;
 
@@ -440,7 +437,6 @@ function buildLeagueColumn(leagueKey, visiblePlayers) {
         <span class="count-pill count-pill-subs">Sub ${partTimePlayers.length}</span>
       </span>
     </h2>
-    <p class="column-subtext">${league.description}</p>
     <div class="line-list roster-sections">
       ${buildRosterSection("Forward", byPosition.F, "forward-section")}
       ${buildRosterSection("Defense", byPosition.D, "defense-section")}
