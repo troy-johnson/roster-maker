@@ -153,7 +153,7 @@ const players = [
     primaryPosition: "F",
     secondaryPosition: "D",
     priorityTier: "Tier 1",
-    leagueStatus: { county: "non-roster", mic: "non-roster" },
+    leagueStatus: { county: "full time", mic: "non-roster" },
     isInjuredReserve: false,
     isOnVacation: false,
   },
