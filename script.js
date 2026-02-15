@@ -1,11 +1,13 @@
 const LEAGUES = {
   county: {
     name: "SLC County",
+    info: "10 regular season games, single elimination playoffs. Starts in early May.",
     totalCost: 2750,
     guaranteedGames: 11
   },
   mic: {
     name: "Mammoth Ice Center",
+    info: "16 regular season games, playoffs TBD. Promotion/Relegation. Starts mid-March.",
     totalCost: 3600,
     guaranteedGames: 16
   }
@@ -515,10 +517,8 @@ function buildPlayerManagementColumn(visiblePlayers) {
       <details class="status-accordion">
         <summary>
             <span class="summary-main">
-            <span class="player-name">${player.name}${player.priorityTier === "Tier 1" ? `<sup class="player-ip" title="Ice Pak">IP</sup>` : ""}</span>
-            <span class="team-tags" aria-label="Team signup status">
-              <span class="team-tag ${isCountyOptedIn ? "team-tag-active-county" : ""}">CTY</span>
-              <span class="team-tag ${isMicOptedIn ? "team-tag-active-mic" : ""}">MIC</span>
+            <span class="player-name">
+              ${player.name}${player.priorityTier === "Tier 1" ? `<sup class="player-ip" title="Ice Pak">IP</sup>` : ""}
               ${
                 isInjuredReserve
                   ? `<span class="team-tag team-tag-ir" aria-label="Injured reserve" title="Injured reserve">
@@ -540,6 +540,10 @@ function buildPlayerManagementColumn(visiblePlayers) {
                     </span>`
                   : ""
               }
+            </span>
+            <span class="team-tags" aria-label="Team signup status">
+              <span class="team-tag ${isCountyOptedIn ? "team-tag-active-county" : ""}">CTY</span>
+              <span class="team-tag ${isMicOptedIn ? "team-tag-active-mic" : ""}">MIC</span>
             </span>
           </span>
           <span class="summary-caret" aria-hidden="true">▾</span>
@@ -674,6 +678,12 @@ function buildLeagueColumn(leagueKey, visiblePlayers) {
   };
 
   const sortedPartTimePlayers = [...partTimePlayers].sort(sortPlayersByLastName);
+  const totalRosterSize = assignedPlayers.length;
+  const positionBreakdown = {
+    F: assignedPlayers.filter((player) => player.primaryPosition === "F").length,
+    D: assignedPlayers.filter((player) => player.primaryPosition === "D").length,
+    G: assignedPlayers.filter((player) => player.primaryPosition === "G").length
+  };
   const weightedPlayerCount = fullTimePlayers.length + partTimePlayers.length * 0.5;
   const fullTimeCost = weightedPlayerCount > 0 ? league.totalCost / weightedPlayerCount : 0;
   const halfTimeCost = fullTimeCost / 2;
@@ -684,21 +694,33 @@ function buildLeagueColumn(leagueKey, visiblePlayers) {
   column.className = `roster-column league-column league-${leagueKey}`;
 
   column.innerHTML = `
-    <h2>
-      ${league.name}
+    <h2 class="league-header">
+      <span class="league-title-wrap">
+        ${league.name}
+        <details class="league-info" aria-label="League information">
+          <summary class="league-info-trigger" title="Show league information" aria-label="Show league information">ⓘ</summary>
+          <div class="league-info-popup">
+            <p>${league.info}</p>
+          </div>
+        </details>
+      </span>
       <span class="count-pills">
-        <span class="count-pill count-pill-f">F ${byPosition.F.length}</span>
-        <span class="count-pill count-pill-d">D ${byPosition.D.length}</span>
-        <span class="count-pill count-pill-g">G ${byPosition.G.length}</span>
-        <span class="count-pill count-pill-subs">Sub ${partTimePlayers.length}</span>
+        <details class="roster-size-info" aria-label="Roster size details">
+          <summary class="count-pill count-pill-roster-size" title="Show roster position breakdown" aria-label="Show roster position breakdown">Roster ${totalRosterSize}</summary>
+          <div class="roster-size-popup">
+            <p><strong>F:</strong> ${positionBreakdown.F}</p>
+            <p><strong>D:</strong> ${positionBreakdown.D}</p>
+            <p><strong>G:</strong> ${positionBreakdown.G}</p>
+          </div>
+        </details>
         <span class="count-pill count-pill-cost">FT ${formatCurrency(fullTimeCost)}</span>
-        <span class="count-pill count-pill-cost">HF ${formatCurrency(halfTimeCost)}</span>
+        <span class="count-pill count-pill-cost">HT ${formatCurrency(halfTimeCost)}</span>
         <details class="cost-info" aria-label="Cost details">
           <summary class="cost-info-trigger" title="Show cost details" aria-label="Show cost details">ⓘ</summary>
           <div class="cost-info-popup">
             <p><strong>Total Cost:</strong> ${formatCurrency(league.totalCost)}</p>
             <p><strong>FT/Game:</strong> ${formatCurrency(fullTimeCostPerGame)}</p>
-            <p><strong>HF/Game:</strong> ${formatCurrency(halfTimeCostPerGame)}</p>
+            <p><strong>HT/Game:</strong> ${formatCurrency(halfTimeCostPerGame)}</p>
           </div>
         </details>
       </span>

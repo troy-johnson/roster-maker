@@ -101,6 +101,16 @@ select {
   gap: 0.45rem;
 }
 
+.league-header {
+  margin-bottom: 0.75rem;
+}
+
+.league-title-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
 .count-pill {
   font-size: 0.74rem;
   padding: 0.1rem 0.4rem;
@@ -116,24 +126,87 @@ select {
   justify-content: flex-end;
 }
 
-.count-pill-f {
-  background: #3a174f;
-}
-
-.count-pill-d {
-  background: #703304;
-}
-
-.count-pill-g {
-  background: #0e4b4f;
-}
-
-.count-pill-subs {
-  background: #6c5a00;
-}
-
 .count-pill-cost {
-  background: #1f4e2d;
+  background: transparent;
+}
+
+.count-pill-roster-size {
+  background: #24313e;
+  border: none;
+  cursor: pointer;
+  list-style: none;
+}
+
+.roster-size-info {
+  position: relative;
+}
+
+.roster-size-info summary::-webkit-details-marker {
+  display: none;
+}
+
+.roster-size-popup {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.25rem);
+  width: max-content;
+  min-width: 110px;
+  padding: 0.45rem 0.55rem;
+  border: none;
+  border-radius: 8px;
+  background: #11161d;
+  z-index: 3;
+}
+
+.roster-size-popup p {
+  margin: 0.15rem 0;
+  color: var(--text);
+  font-size: 0.75rem;
+}
+
+.roster-size-info[open] .roster-size-popup {
+  display: block;
+}
+
+.league-info {
+  position: relative;
+}
+
+.league-info-trigger {
+  list-style: none;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.league-info-trigger::-webkit-details-marker {
+  display: none;
+}
+
+.league-info-popup {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: calc(100% + 0.25rem);
+  width: max-content;
+  max-width: 280px;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #11161d;
+  z-index: 3;
+}
+
+.league-info-popup p {
+  margin: 0;
+  color: var(--text);
+  font-size: 0.75rem;
+}
+
+.league-info[open] .league-info-popup,
+.league-info:hover .league-info-popup {
+  display: block;
 }
 
 .cost-info {
@@ -159,7 +232,7 @@ select {
   width: max-content;
   min-width: 200px;
   padding: 0.45rem 0.55rem;
-  border: 1px solid var(--border);
+  border: none;
   border-radius: 8px;
   background: #11161d;
   z-index: 3;
@@ -214,7 +287,7 @@ select {
 .player-ip {
   margin-left: 0.2rem;
   font-size: 0.62rem;
-  color: #8ecbff;
+  color: #1d315f;
   font-weight: 800;
 }
 
