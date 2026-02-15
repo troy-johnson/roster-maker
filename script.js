@@ -1,9 +1,13 @@
 const LEAGUES = {
   county: {
-    name: "SLC County"
+    name: "SLC County",
+    totalCost: 2750,
+    guaranteedGames: 11
   },
   mic: {
-    name: "Mammoth Ice Center"
+    name: "Mammoth Ice Center",
+    totalCost: 3600,
+    guaranteedGames: 16
   }
 };
 
@@ -423,6 +427,15 @@ function getRosterDisplayName(name) {
   return isMobile ? getMobileRosterName(name) : name;
 }
 
+function formatCurrency(amount) {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(amount);
+}
+
 function sortPlayersByLastName(a, b) {
   const lastNameComparison = getLastName(a.name).localeCompare(getLastName(b.name));
   if (lastNameComparison !== 0) return lastNameComparison;
@@ -501,8 +514,8 @@ function buildPlayerManagementColumn(visiblePlayers) {
     row.innerHTML = `
       <details class="status-accordion">
         <summary>
-          <span class="summary-main">
-            <span class="player-name">${player.name}</span>
+            <span class="summary-main">
+            <span class="player-name">${player.name}${player.priorityTier === "Tier 1" ? `<sup class="player-ip" title="Ice Pak">IP</sup>` : ""}</span>
             <span class="team-tags" aria-label="Team signup status">
               <span class="team-tag ${isCountyOptedIn ? "team-tag-active-county" : ""}">CTY</span>
               <span class="team-tag ${isMicOptedIn ? "team-tag-active-mic" : ""}">MIC</span>
@@ -532,6 +545,7 @@ function buildPlayerManagementColumn(visiblePlayers) {
           <span class="summary-caret" aria-hidden="true">▾</span>
         </summary>
         <div class="accordion-content">
+          ${player.notes ? `<p class="player-note">${player.notes}</p>` : ""}
           <label class="inline-field" for="primary-position-${player.id}">
             Primary Position
             <select id="primary-position-${player.id}" data-player-id="${player.id}" class="status-select">
@@ -660,7 +674,11 @@ function buildLeagueColumn(leagueKey, visiblePlayers) {
   };
 
   const sortedPartTimePlayers = [...partTimePlayers].sort(sortPlayersByLastName);
-
+  const weightedPlayerCount = fullTimePlayers.length + partTimePlayers.length * 0.5;
+  const fullTimeCost = weightedPlayerCount > 0 ? league.totalCost / weightedPlayerCount : 0;
+  const halfTimeCost = fullTimeCost / 2;
+  const fullTimeCostPerGame = league.guaranteedGames > 0 ? fullTimeCost / league.guaranteedGames : 0;
+  const halfTimeCostPerGame = fullTimeCostPerGame / 2;
 
   const column = document.createElement("section");
   column.className = `roster-column league-column league-${leagueKey}`;
@@ -673,6 +691,16 @@ function buildLeagueColumn(leagueKey, visiblePlayers) {
         <span class="count-pill count-pill-d">D ${byPosition.D.length}</span>
         <span class="count-pill count-pill-g">G ${byPosition.G.length}</span>
         <span class="count-pill count-pill-subs">Sub ${partTimePlayers.length}</span>
+        <span class="count-pill count-pill-cost">FT ${formatCurrency(fullTimeCost)}</span>
+        <span class="count-pill count-pill-cost">HF ${formatCurrency(halfTimeCost)}</span>
+        <details class="cost-info" aria-label="Cost details">
+          <summary class="cost-info-trigger" title="Show cost details" aria-label="Show cost details">ⓘ</summary>
+          <div class="cost-info-popup">
+            <p><strong>Total Cost:</strong> ${formatCurrency(league.totalCost)}</p>
+            <p><strong>FT/Game:</strong> ${formatCurrency(fullTimeCostPerGame)}</p>
+            <p><strong>HF/Game:</strong> ${formatCurrency(halfTimeCostPerGame)}</p>
+          </div>
+        </details>
       </span>
     </h2>
     <div class="line-list roster-sections">
