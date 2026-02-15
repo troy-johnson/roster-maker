@@ -20,6 +20,7 @@ const players = [
   {
     id: "p6",
     name: "Troy Johnson",
+    notes: "",
     primaryPosition: "D",
     secondaryPosition: "D",
     priorityTier: "Tier 1",
@@ -30,6 +31,7 @@ const players = [
   {
     id: "p7",
     name: "Eric Capps",
+    notes: "",
     primaryPosition: "F",
     secondaryPosition: "F",
     priorityTier: "Tier 1",
@@ -40,6 +42,7 @@ const players = [
   {
     id: "p8",
     name: "Gracie Capps",
+    notes: "",
     primaryPosition: "F",
     secondaryPosition: "F",
     priorityTier: "Tier 1",
@@ -50,6 +53,7 @@ const players = [
   {
     id: "p9",
     name: "Mike Thompson",
+    notes: "",
     primaryPosition: "F",
     secondaryPosition: "F",
     priorityTier: "Tier 1",
@@ -60,6 +64,7 @@ const players = [
   {
     id: "p10",
     name: "Stefan Wilson",
+    notes: "",
     primaryPosition: "D",
     secondaryPosition: "D",
     priorityTier: "Tier 1",
@@ -70,6 +75,7 @@ const players = [
   {
     id: "p11",
     name: "Marcus Capps",
+    notes: "",
     primaryPosition: "F",
     secondaryPosition: "F",
     priorityTier: "Tier 1",
@@ -80,6 +86,7 @@ const players = [
   {
     id: "p12",
     name: "Jay Bartlett",
+    notes: "",
     primaryPosition: "F",
     secondaryPosition: "F",
     priorityTier: "Tier 1",
@@ -90,6 +97,7 @@ const players = [
   {
     id: "p13",
     name: "Chris Browne",
+    notes: "",
     primaryPosition: "F",
     secondaryPosition: "D",
     priorityTier: "Tier 1",
@@ -100,6 +108,7 @@ const players = [
   {
     id: "p14",
     name: "Ned White",
+    notes: "",
     primaryPosition: "F",
     secondaryPosition: "F",
     priorityTier: "Tier 1",
@@ -110,6 +119,7 @@ const players = [
   {
     id: "p15",
     name: "John Pereira",
+    notes: "",
     primaryPosition: "D",
     secondaryPosition: "F",
     priorityTier: "Tier 1",
@@ -120,6 +130,7 @@ const players = [
   {
     id: "p16",
     name: "Scott Wade",
+    notes: "",
     primaryPosition: "G",
     secondaryPosition: "G",
     priorityTier: "Tier 1",
@@ -130,6 +141,7 @@ const players = [
   {
     id: "p17",
     name: "Christiaan O'Connor",
+    notes: "",
     primaryPosition: "F",
     secondaryPosition: "D",
     priorityTier: "Tier 1",
@@ -140,6 +152,7 @@ const players = [
   {
     id: "p18",
     name: "Chad Linville",
+    notes: "",
     primaryPosition: "D",
     secondaryPosition: "D",
     priorityTier: "Tier 1",
@@ -150,6 +163,7 @@ const players = [
   {
     id: "p19",
     name: "Ben Smith",
+    notes: "",
     primaryPosition: "F",
     secondaryPosition: "D",
     priorityTier: "Tier 1",
@@ -160,6 +174,7 @@ const players = [
   {
     id: "p20",
     name: "Blake Moss",
+    notes: "",
     primaryPosition: "F",
     secondaryPosition: "F",
     priorityTier: "Tier 1",
@@ -170,6 +185,7 @@ const players = [
   {
     id: "p21",
     name: "Dave Mohr",
+    notes: "",
     primaryPosition: "F",
     secondaryPosition: "F",
     priorityTier: "Tier 1",
@@ -180,6 +196,7 @@ const players = [
   {
     id: "p22",
     name: "Max Gesteland",
+    notes: "",
     primaryPosition: "D",
     secondaryPosition: "D",
     priorityTier: "Tier 1",
@@ -190,6 +207,7 @@ const players = [
   {
     id: "p23",
     name: "Mikko Anderson",
+    notes: "",
     primaryPosition: "F",
     secondaryPosition: "F",
     priorityTier: "Tier 1",
@@ -200,6 +218,7 @@ const players = [
   {
     id: "p24",
     name: "Per Gesteland",
+    notes: "",
     primaryPosition: "F",
     secondaryPosition: "D",
     priorityTier: "Tier 1",
@@ -210,6 +229,7 @@ const players = [
   {
     id: "p25",
     name: "Quinn Pereira",
+    notes: "",
     primaryPosition: "F",
     secondaryPosition: "D",
     priorityTier: "Tier 1",
@@ -220,6 +240,7 @@ const players = [
   {
     id: "p26",
     name: "Rich Greenberg",
+    notes: "",
     primaryPosition: "F",
     secondaryPosition: "F",
     priorityTier: "Tier 1",
@@ -230,6 +251,7 @@ const players = [
   {
     id: "p27",
     name: "Jake Barnes",
+    notes: "",
     primaryPosition: "F",
     secondaryPosition: "F",
     priorityTier: "Tier 1",
@@ -240,6 +262,7 @@ const players = [
   {
     id: "p28",
     name: "Reid Jacobson",
+    notes: "",
     primaryPosition: "G",
     secondaryPosition: "D",
     priorityTier: "Tier 1",
@@ -250,6 +273,7 @@ const players = [
   {
     id: "p29",
     name: "Jack Cantarella",
+    notes: "",
     primaryPosition: "F",
     secondaryPosition: "F",
     priorityTier: "Tier 2",
@@ -260,6 +284,7 @@ const players = [
   {
     id: "p30",
     name: "Grayson Cantarella",
+    notes: "",
     primaryPosition: "F",
     secondaryPosition: "F",
     priorityTier: "Tier 2",
@@ -270,6 +295,7 @@ const players = [
   {
     id: "p31",
     name: "Charlie Capps",
+    notes: "",
     primaryPosition: "F",
     secondaryPosition: "F",
     priorityTier: "Tier 2",
@@ -280,6 +306,7 @@ const players = [
   {
     id: "p32",
     name: "Tim Bywater",
+    notes: "Morning skates",
     primaryPosition: "F",
     secondaryPosition: "F",
     priorityTier: "Tier 3",
@@ -290,6 +317,7 @@ const players = [
   {
     id: "p33",
     name: "Tara Riley",
+    notes: "COVID cup goalie",
     primaryPosition: "G",
     secondaryPosition: "G",
     priorityTier: "Tier 3",
@@ -300,6 +328,7 @@ const players = [
   {
     id: "p34",
     name: "Jon Solomon",
+    notes: "Morning skates",
     primaryPosition: "F",
     secondaryPosition: "F",
     priorityTier: "Tier 3",
@@ -310,6 +339,7 @@ const players = [
   {
     id: "p35",
     name: "Rob Kramer",
+    notes: "Jay/Troy PC teammate",
     primaryPosition: "F",
     secondaryPosition: "F",
     priorityTier: "Tier 3",
@@ -320,6 +350,7 @@ const players = [
   {
     id: "p36",
     name: "Tony Baker",
+    notes: "Jay/Troy PC teammate",
     primaryPosition: "F",
     secondaryPosition: "F",
     priorityTier: "Tier 3",
@@ -330,13 +361,25 @@ const players = [
   {
     id: "p37",
     name: "Robbie Heath",
+    notes: "Jay/Troy PC teammate",
     primaryPosition: "F",
     secondaryPosition: "F",
     priorityTier: "Tier 3",
     leagueStatus: { county: "non-roster", mic: "non-roster" },
     isInjuredReserve: false,
     isOnVacation: false,
-  }
+  },
+  {
+    id: "p38",
+    name: "John Nigro",
+    notes: "Jay/Troy PC teammate",
+    primaryPosition: "F",
+    secondaryPosition: "F",
+    priorityTier: "Tier 3",
+    leagueStatus: { county: "non-roster", mic: "non-roster" },
+    isInjuredReserve: false,
+    isOnVacation: false,
+  },
 ];
 
 
