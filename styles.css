@@ -131,6 +131,50 @@ select {
 .count-pill-subs {
   background: #6c5a00;
 }
+
+.count-pill-cost {
+  background: #1f4e2d;
+}
+
+.cost-info {
+  position: relative;
+}
+
+.cost-info-trigger {
+  list-style: none;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.cost-info-trigger::-webkit-details-marker {
+  display: none;
+}
+
+.cost-info-popup {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.25rem);
+  width: max-content;
+  min-width: 200px;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #11161d;
+  z-index: 3;
+}
+
+.cost-info-popup p {
+  margin: 0.15rem 0;
+  color: var(--text);
+  font-size: 0.75rem;
+}
+
+.cost-info[open] .cost-info-popup,
+.cost-info:hover .cost-info-popup {
+  display: block;
+}
 .column-subtext {
   margin: 0.25rem 0 0.75rem;
   color: var(--muted);
@@ -157,6 +201,21 @@ select {
   font-size: 0.92rem;
   font-weight: 600;
   color: var(--text);
+}
+
+.player-note {
+  margin: 0;
+  font-style: italic;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+
+.player-ip {
+  margin-left: 0.2rem;
+  font-size: 0.62rem;
+  color: #8ecbff;
+  font-weight: 800;
 }
 
 .team-tags {
