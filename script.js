@@ -519,27 +519,25 @@ function buildPlayerManagementColumn(visiblePlayers) {
             <span class="summary-main">
             <span class="player-name">
               ${player.name}${player.priorityTier === "Tier 1" ? `<sup class="player-ip" title="Ice Pak">IP</sup>` : ""}
-              ${
-                isInjuredReserve
-                  ? `<span class="team-tag team-tag-ir" aria-label="Injured reserve" title="Injured reserve">
+              ${isInjuredReserve
+        ? `<span class="team-tag team-tag-ir" aria-label="Injured reserve" title="Injured reserve">
                       <svg viewBox="0 0 16 16" role="img" aria-hidden="true" focusable="false">
                         <circle cx="8" cy="8" r="7" />
                         <path d="M8 4.3v7.4M4.3 8h7.4" />
                       </svg>
                     </span>`
-                  : ""
-              }
-              ${
-                isOnVacation
-                  ? `<span class="team-tag team-tag-vacation" aria-label="On vacation" title="On vacation">
+        : ""
+      }
+              ${isOnVacation
+        ? `<span class="team-tag team-tag-vacation" aria-label="On vacation" title="On vacation">
                       <svg viewBox="0 0 16 16" role="img" aria-hidden="true" focusable="false">
                         <rect x="2.5" y="5" width="11" height="8.5" rx="1.6" />
                         <path d="M5 5V4a3 3 0 0 1 6 0v1" />
                         <path d="M2.5 8h11" />
                       </svg>
                     </span>`
-                  : ""
-              }
+        : ""
+      }
             </span>
             <span class="team-tags" aria-label="Team signup status">
               <span class="team-tag ${isCountyOptedIn ? "team-tag-active-county" : ""}">CTY</span>
@@ -638,18 +636,18 @@ function buildRosterSection(title, sectionPlayers, className = "", playersPerLin
     <section class="roster-group ${className}">
       <h3>${title} <span class="count-pill">${sectionPlayers.length}</span></h3>
       ${sectionPlayers.length > 0
-        ? playerLines
-            .map(
-              (linePlayers) => `
+      ? playerLines
+        .map(
+          (linePlayers) => `
                 <p class="roster-line" style="--line-columns: ${playersPerLine};">
                   ${linePlayers
-                    .map((player) => `<span class="roster-player-slot">${getRosterDisplayName(player.name)}</span>`)
-                    .join("")}
+              .map((player) => `<span class="roster-player-slot">${getRosterDisplayName(player.name)}</span>`)
+              .join("")}
                 </p>
               `
-            )
-            .join("")
-        : '<p class="empty-message">No players in this section.</p>'}
+        )
+        .join("")
+      : '<p class="empty-message">No players in this section.</p>'}
     </section>
   `;
 }
@@ -746,6 +744,11 @@ function buildLeagueColumn(leagueKey, visiblePlayers) {
             <p><strong>F:</strong> ${positionBreakdown.F}</p>
             <p><strong>D:</strong> ${positionBreakdown.D}</p>
             <p><strong>G:</strong> ${positionBreakdown.G}</p>
+        </div>          <div class="roster-size-popup">
+            <p><strong>FT:</strong> ${fullTimeCost}</p>
+            <p><strong>HT:</strong> ${halfTimeCost}</p>
+            <p><strong>FT/G:</strong> ${fullTimeCostPerGame}</p>
+            <p><strong>HT/G:</strong> ${halfTimeCostPerGame}</p>
           </div>
         </details>
         <span class="count-pill count-pill-cost">FT ${formatCurrency(fullTimeCost)}</span>
