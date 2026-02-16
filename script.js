@@ -739,7 +739,7 @@ function buildLeagueColumn(leagueKey, visiblePlayers) {
       </span>
       <span class="count-pills">
         <details class="roster-size-info" aria-label="Roster size details">
-          <summary class="count-pill count-pill-roster-size" title="Show roster position breakdown" aria-label="Show roster position breakdown">Roster ${totalRosterSize}</summary>
+          <summary class="count-pill" title="Show roster position breakdown" aria-label="Show roster position breakdown">Roster <span class="count-pill-roster-size">${totalRosterSize}</span></summary>
           <div class="roster-size-popup">
             <p><strong>F:</strong> ${positionBreakdown.F}</p>
             <p><strong>D:</strong> ${positionBreakdown.D}</p>
@@ -751,8 +751,8 @@ function buildLeagueColumn(leagueKey, visiblePlayers) {
             <p><strong>HT/G:</strong> ${halfTimeCostPerGame}</p>
           </div>
         </details>
-        <span class="count-pill count-pill-cost">FT ${formatCurrency(fullTimeCost)}</span>
-        <span class="count-pill count-pill-cost">HT ${formatCurrency(halfTimeCost)}</span>
+        <span class="count-pill count-pill-cost">FT: ${formatCurrency(fullTimeCost)}</span>
+        <span class="count-pill count-pill-cost">HT: ${formatCurrency(halfTimeCost)}</span>
         <details class="cost-info" aria-label="Cost details">
           <summary class="cost-info-trigger" title="Show cost details" aria-label="Show cost details">ⓘ</summary>
           <div class="cost-info-popup">
