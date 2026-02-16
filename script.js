@@ -654,6 +654,41 @@ function buildRosterSection(title, sectionPlayers, className = "", playersPerLin
   `;
 }
 
+
+const TOOLTIP_DETAIL_SELECTOR = ".league-info, .roster-size-info, .cost-info";
+
+function closeOtherTooltips(activeDetails) {
+  document.querySelectorAll(TOOLTIP_DETAIL_SELECTOR).forEach((details) => {
+    if (details !== activeDetails) {
+      details.removeAttribute("open");
+    }
+  });
+}
+
+function setupTooltipBehavior() {
+  document.addEventListener("click", (event) => {
+    const summary = event.target.closest(
+      ".league-info > summary, .roster-size-info > summary, .cost-info > summary"
+    );
+
+    if (summary) {
+      const details = summary.parentElement;
+
+      requestAnimationFrame(() => {
+        if (details.hasAttribute("open")) {
+          closeOtherTooltips(details);
+        }
+      });
+
+      return;
+    }
+
+    if (!event.target.closest(TOOLTIP_DETAIL_SELECTOR)) {
+      closeOtherTooltips(null);
+    }
+  });
+}
+
 function buildLeagueColumn(leagueKey, visiblePlayers) {
   const league = LEAGUES[leagueKey];
 
@@ -748,6 +783,7 @@ function renderBoard() {
   board.appendChild(buildLeagueColumn("mic", visiblePlayers));
 }
 
+setupTooltipBehavior();
 renderBoard();
 
 window.addEventListener("resize", renderBoard);

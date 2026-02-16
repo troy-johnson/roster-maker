@@ -137,82 +137,19 @@ select {
   list-style: none;
 }
 
-.roster-size-info {
-  position: relative;
-}
-
-.roster-size-info summary::-webkit-details-marker {
-  display: none;
-}
-
-.roster-size-popup {
-  display: none;
-  position: absolute;
-  right: 0;
-  top: calc(100% + 0.25rem);
-  width: max-content;
-  min-width: 110px;
-  padding: 0.45rem 0.55rem;
-  border: none;
-  border-radius: 8px;
-  background: #11161d;
-  z-index: 3;
-}
-
-.roster-size-popup p {
-  margin: 0.15rem 0;
-  color: var(--text);
-  font-size: 0.75rem;
-}
-
-.roster-size-info[open] .roster-size-popup {
-  display: block;
-}
-
-.league-info {
-  position: relative;
-}
-
-.league-info-trigger {
-  list-style: none;
-  cursor: pointer;
-  color: var(--muted);
-  font-size: 0.8rem;
-}
-
-.league-info-trigger::-webkit-details-marker {
-  display: none;
-}
-
-.league-info-popup {
-  display: none;
-  position: absolute;
-  left: 0;
-  top: calc(100% + 0.25rem);
-  width: max-content;
-  max-width: 280px;
-  padding: 0.45rem 0.55rem;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: #11161d;
-  z-index: 3;
-}
-
-.league-info-popup p {
-  margin: 0;
-  color: var(--text);
-  font-size: 0.75rem;
-}
-
-.league-info[open] .league-info-popup,
-.league-info:hover .league-info-popup {
-  display: block;
-}
-
+.roster-size-info,
+.league-info,
 .cost-info {
   position: relative;
 }
 
+.roster-size-info summary::-webkit-details-marker,
+.league-info-trigger::-webkit-details-marker,
+.cost-info-trigger::-webkit-details-marker {
+  display: none;
+}
+
+.league-info-trigger,
 .cost-info-trigger {
   list-style: none;
   cursor: pointer;
@@ -220,32 +157,57 @@ select {
   font-size: 0.8rem;
 }
 
-.cost-info-trigger::-webkit-details-marker {
-  display: none;
-}
-
+.roster-size-popup,
+.league-info-popup,
 .cost-info-popup {
   display: none;
   position: absolute;
-  right: 0;
   top: calc(100% + 0.25rem);
   width: max-content;
-  min-width: 200px;
   padding: 0.45rem 0.55rem;
-  border: none;
+  border: 1px solid ghostwhite;
   border-radius: 8px;
   background: #11161d;
   z-index: 3;
 }
 
+.roster-size-popup,
+.cost-info-popup {
+  right: 0;
+}
+
+.league-info-popup {
+  left: 0;
+  max-width: 280px;
+}
+
+.roster-size-popup {
+  min-width: 110px;
+}
+
+.cost-info-popup {
+  min-width: 200px;
+}
+
+.roster-size-popup p,
+.league-info-popup p,
 .cost-info-popup p {
-  margin: 0.15rem 0;
   color: var(--text);
   font-size: 0.75rem;
 }
 
-.cost-info[open] .cost-info-popup,
-.cost-info:hover .cost-info-popup {
+.roster-size-popup p,
+.cost-info-popup p {
+  margin: 0.15rem 0;
+}
+
+.league-info-popup p {
+  margin: 0;
+}
+
+.roster-size-info[open] .roster-size-popup,
+.league-info[open] .league-info-popup,
+.cost-info[open] .cost-info-popup {
   display: block;
 }
 .column-subtext {
