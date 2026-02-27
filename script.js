@@ -392,7 +392,8 @@ const players = [
 const uiState = {
   filters: {
     position: "all"
-  }
+  },
+  openPlayerId: null
 };
 
 function getAssignedLeagueStatus(player, leagueKey) {
@@ -514,7 +515,7 @@ function buildPlayerManagementColumn(visiblePlayers) {
     row.className = "player-row";
 
     row.innerHTML = `
-      <details class="status-accordion">
+      <details class="status-accordion" ${player.id === uiState.openPlayerId ? "open" : ""}>
         <summary>
             <span class="summary-main">
             <span class="player-name">
@@ -606,6 +607,9 @@ function buildPlayerManagementColumn(visiblePlayers) {
     });
 
     const accordion = row.querySelector(".status-accordion");
+    accordion.addEventListener("toggle", () => {
+      uiState.openPlayerId = accordion.open ? player.id : null;
+    });
     row.addEventListener("click", (event) => {
       if (event.target.closest(".accordion-content")) return;
       if (event.target.closest("summary")) return;
