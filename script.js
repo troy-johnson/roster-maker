@@ -744,11 +744,6 @@ function buildLeagueColumn(leagueKey, visiblePlayers) {
             <p><strong>F:</strong> ${positionBreakdown.F}</p>
             <p><strong>D:</strong> ${positionBreakdown.D}</p>
             <p><strong>G:</strong> ${positionBreakdown.G}</p>
-        </div>          <div class="roster-size-popup">
-            <p><strong>FT:</strong> ${fullTimeCost}</p>
-            <p><strong>HT:</strong> ${halfTimeCost}</p>
-            <p><strong>FT/G:</strong> ${fullTimeCostPerGame}</p>
-            <p><strong>HT/G:</strong> ${halfTimeCostPerGame}</p>
           </div>
         </details>
         <span class="count-pill count-pill-cost">FT: ${formatCurrency(fullTimeCost)}</span>
