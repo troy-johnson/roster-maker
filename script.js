@@ -392,7 +392,8 @@ const players = [
 const uiState = {
   filters: {
     position: "all"
-  }
+  },
+  openPlayerId: null
 };
 
 function getAssignedLeagueStatus(player, leagueKey) {
@@ -514,7 +515,7 @@ function buildPlayerManagementColumn(visiblePlayers) {
     row.className = "player-row";
 
     row.innerHTML = `
-      <details class="status-accordion">
+      <details class="status-accordion" ${player.id === uiState.openPlayerId ? "open" : ""}>
         <summary>
             <span class="summary-main">
             <span class="player-name">
@@ -606,6 +607,9 @@ function buildPlayerManagementColumn(visiblePlayers) {
     });
 
     const accordion = row.querySelector(".status-accordion");
+    accordion.addEventListener("toggle", () => {
+      uiState.openPlayerId = accordion.open ? player.id : null;
+    });
     row.addEventListener("click", (event) => {
       if (event.target.closest(".accordion-content")) return;
       if (event.target.closest("summary")) return;
@@ -744,11 +748,6 @@ function buildLeagueColumn(leagueKey, visiblePlayers) {
             <p><strong>F:</strong> ${positionBreakdown.F}</p>
             <p><strong>D:</strong> ${positionBreakdown.D}</p>
             <p><strong>G:</strong> ${positionBreakdown.G}</p>
-        </div>          <div class="roster-size-popup">
-            <p><strong>FT:</strong> ${fullTimeCost}</p>
-            <p><strong>HT:</strong> ${halfTimeCost}</p>
-            <p><strong>FT/G:</strong> ${fullTimeCostPerGame}</p>
-            <p><strong>HT/G:</strong> ${halfTimeCostPerGame}</p>
           </div>
         </details>
         <span class="count-pill count-pill-cost">FT: ${formatCurrency(fullTimeCost)}</span>
